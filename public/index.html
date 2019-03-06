@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Calendar Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Calendar Viewer Application">
+    <meta name="keywords" content="Calendar">
+    <meta name="author" content="Peter Hudel">
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+<body>
+
+    <h3>Download test</h3>
+    If the A3 stub is running and testCalSimpleUTC.ics exists in the uploads/ directory on the server, then clicking on the link below will download it from the server.<br>
+    <a href="/uploads/testCalSimpleUTC.ics">testCalSimpleUTC.ics</a>
+    
+    <hr>
+    <CENTER><B>Status Panel</B></CENTER>
+    <hr>
+    <form ref='statusPanel'
+          id='statusPanel'>
+        <div class="form-group">
+            <button id="clearStatus" type="button" class="btn">Clear</button>
+        </div>
+    </form>
+    <hr>
+    <CENTER><B>File Log Panel</B></CENTER>
+    <hr>
+
+    <form ref='statusPanel'
+          id='statusPanel'>
+        <table align=center>
+        <tr>
+            <th>File Name<br/>(click to download)</th>
+            <th>Version</th>
+            <th>Product ID</th>
+            <th>Number of<br/>Events</th>
+            <th>Number of<br/>Properties</th>
+        </tr>
+        </table>
+    </form>
+
+    <hr>
+    <CENTER><B>Calendar Status Panel</B></CENTER>
+    <hr>
+    <form ref='calendarPanel'
+          id='calendarPanel'>
+        <table align = center>
+            <tr>
+                <th>Event ID</th>
+                <th>Start Date</th>
+                <th>Start Time</th>
+                <th>Creation Date</th>
+                <th>Summary</th>
+                <th>Props</th>
+                <th>Alarms</th>
+            </tr>
+        </table>
+        <div class="form-group">
+            <button id="showAlarms" type="button" class="btn">Show Alarms</button>
+        </div>
+        <div class="form-group">
+            <button id="ShowProps" type="button" class="btn">Show Props</button>
+        </div>
+        <script src=/index.js></script>
+    </form>
+
+    <hr>
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
