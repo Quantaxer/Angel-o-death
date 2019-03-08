@@ -22,15 +22,16 @@ $(document).ready(function() {
         }
     });
 
+    //Clear button
+    document.getElementById('clearStatus').onclick = function() {
+        console.log("hehe");
+    };
+
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible
     $('#someform').submit(function(e){
         $('#blah').html("Callback from the form");
         e.preventDefault();
         //Pass data to the Ajax call, so it gets passed to the 
         $.ajax({});
-    });
-
-    $('#showAlarms').submit(function(e){
-        console.Log("hi");
     });
 });
