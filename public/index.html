@@ -17,27 +17,24 @@
     <!-- Custom CSS End -->
 </head>
 <body>
-
-    <h3>Download test</h3>
-    If the A3 stub is running and testCalSimpleUTC.ics exists in the uploads/ directory on the server, then clicking on the link below will download it from the server.<br>
-    <a href="/uploads/testCalSimpleUTC.ics">testCalSimpleUTC.ics</a>
-    
-    <hr>
     <CENTER><B>Status Panel</B></CENTER>
     <hr>
     <form ref='statusPanel'
           id='statusPanel'>
-        <div class="form-group">
-            <button id="clearStatus" type="button" class="btn">Clear</button>
+        <div id ="statusBox">
+            Nothing here yet
+
         </div>
+        <button id="clearStatus" type="button" class="btn">Clear</button>
+
     </form>
     <hr>
     <CENTER><B>File Log Panel</B></CENTER>
     <hr>
 
-    <form ref='statusPanel'
-          id='statusPanel'>
-        <table align=center>
+    <form ref='fileLogPanel'
+          id='fileLogPanel'>
+        <table align=center id = 'fileLogTable'>
         <tr>
             <th>File Name<br/>(click to download)</th>
             <th>Version</th>
@@ -46,13 +43,17 @@
             <th>Number of<br/>Properties</th>
         </tr>
         </table>
+        <div class="form-group">
+            <button id="uploadFile" type="button" class="btn">Upload File</button>
+        </div>
     </form>
 
     <hr>
-    <CENTER><B>Calendar Status Panel</B></CENTER>
+    <CENTER><B>Calendar View Panel</B></CENTER>
     <hr>
     <form ref='calendarPanel'
           id='calendarPanel'>
+        <select id = 'viewFiles'></select>
         <table align = center>
             <tr>
                 <th>Event ID</th>
@@ -64,24 +65,18 @@
                 <th>Alarms</th>
             </tr>
         </table>
-        <div class="form-group">
+        <div id = "container">
             <button id="showAlarms" type="button" class="btn">Show Alarms</button>
-        </div>
-        <div class="form-group">
             <button id="ShowProps" type="button" class="btn">Show Props</button>
         </div>
-        <script src=/index.js></script>
     </form>
 
     <hr>
+    <div id="container">
+        <button id="createCal" type="button" class="btn">Create Calendar</button>
+        <button id="createEvent" type="button" class="btn">Create Event</button>
+    </div>
     <!-- Leave me at the bottom of body -->
     <script src="/index.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-

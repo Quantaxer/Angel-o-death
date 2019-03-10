@@ -12,7 +12,7 @@ const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
 // Minimization
-const fs = require('fs');
+const fs = require('fs-extra');
 const JavaScriptObfuscator = require('javascript-obfuscator');
 
 // Important, pass in port as in `npm run dev 1234`, do not change
@@ -75,6 +75,12 @@ app.get('/someendpoint', function(req , res){
   res.send({
     foo: "bar"
   });
+});
+
+app.get('/listFiles', function(req, res) {
+    fs.readdir('./uploads', (err, files) => {
+        res.send({allFiles:files});
+    });
 });
 
 app.listen(portNum);
