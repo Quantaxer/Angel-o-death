@@ -23,11 +23,9 @@
           id='statusPanel'>
         <div id ="statusBox">
             Nothing here yet
-
         </div>
-        <button id="clearStatus" type="button" class="btn">Clear</button>
-
     </form>
+    <button id="clearStatus" type="button" class="btn">Clear</button>
     <hr>
     <CENTER><B>File Log Panel</B></CENTER>
     <hr>
@@ -54,12 +52,11 @@
     <form ref='calendarPanel'
           id='calendarPanel'>
         <select id = 'viewFiles'></select>
-        <table align = center>
+        <table align = center id = 'calViewTable'>
             <tr>
-                <th>Event ID</th>
+                <th>Event No</th>
                 <th>Start Date</th>
                 <th>Start Time</th>
-                <th>Creation Date</th>
                 <th>Summary</th>
                 <th>Props</th>
                 <th>Alarms</th>
@@ -67,7 +64,7 @@
         </table>
         <div id = "container">
             <button id="showAlarms" type="button" class="btn">Show Alarms</button>
-            <button id="ShowProps" type="button" class="btn">Show Props</button>
+            <button id="showProps" type="button" class="btn">Show Props</button>
         </div>
     </form>
 

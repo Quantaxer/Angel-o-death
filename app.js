@@ -71,11 +71,11 @@ app.get('/uploads/:name', function(req , res){
 //******************** Your code goes here ******************** 
 
 //Sample endpoint
-app.get('/someendpoint', function(req , res){
+/*app.get('/someendpoint', function(req , res){
   res.send({
     foo: "bar"
   });
-});
+});*/
 
 app.get('/listFiles', function(req, res) {
     fs.readdir('./uploads', (err, files) => {

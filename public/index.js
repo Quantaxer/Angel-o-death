@@ -95,10 +95,100 @@ $(document).ready(function() {
             console.log(error); 
         }
     });
+    //Populate the calView table initially
+    $('#viewFiles').ready(function() {
+        let table = document.getElementById('calViewTable');
+        let row = table.insertRow(1);
+
+        let cell = row.insertCell(0);
+        let value = document.createTextNode("tempNo");
+        cell.appendChild(value);
+
+        let cell1 = row.insertCell(1);
+        let value1 = document.createTextNode("tempDate");
+        cell1.appendChild(value1);
+
+        let cell2 = row.insertCell(2);
+        let value2 = document.createTextNode("tempTime");
+        cell2.appendChild(value2);
+
+        let cell3 = row.insertCell(3);
+        let value3 = document.createTextNode("tempSummary");
+        cell3.appendChild(value3);
+
+        let cell4 = row.insertCell(4);
+        let value4 = document.createTextNode("0");
+        cell4.appendChild(value4);
+
+        let cell5 = row.insertCell(5);
+        let value5 = document.createTextNode("0");
+        cell5.appendChild(value5);
+
+    });
+
+    //Update calViewTable when it changes
+    $('#viewFiles').on('change', function() {
+        let table = document.getElementById('calViewTable');
+        table.deleteRow(1);
+        let row = table.insertRow(1);
+
+        let cell = row.insertCell(0);
+        let value = document.createTextNode("tempNo");
+        cell.appendChild(value);
+
+        let cell1 = row.insertCell(1);
+        let value1 = document.createTextNode("tempDate");
+        cell1.appendChild(value1);
+
+        let cell2 = row.insertCell(2);
+        let value2 = document.createTextNode("tempTime");
+        cell2.appendChild(value2);
+
+        let cell3 = row.insertCell(3);
+        let value3 = document.createTextNode("tempSummary");
+        cell3.appendChild(value3);
+
+        let cell4 = row.insertCell(4);
+        let value4 = document.createTextNode("0");
+        cell4.appendChild(value4);
+
+        let cell5 = row.insertCell(5);
+        let value5 = document.createTextNode("0");
+        cell5.appendChild(value5);
+
+    });
+
 
     //Clear button
     document.getElementById('clearStatus').onclick = function() {
-        console.log("hehe");
+        $('#statusBox').html("");
+    };
+
+    //Upload File
+    document.getElementById('uploadFile').onclick = function() {
+
+    };
+
+    //Show Show Alarms
+    document.getElementById('showAlarms').onclick = function() {
+        var eventToShow = prompt("Enter the Event Number you wish to see alarms for");
+        $('#statusBox').append("<br/>Displaying event number " +eventToShow+":");
+    };
+
+    //Show Props
+    document.getElementById('showProps').onclick = function() {
+        var propsToShow = prompt("Enter the Event Number you wish to see properties for");
+        $('#statusBox').append("<br/>Displaying event number " +propsToShow+":");
+    };
+
+    //Create Calendar
+    document.getElementById('createCal').onclick = function() {
+        document.getElementById('statusPanel').innerHTML = "Nothing Here Yet";
+    };
+
+    //Create Event
+    document.getElementById('createEvent').onclick = function() {
+        document.getElementById('statusPanel').innerHTML = "Nothing Here Yet";
     };
 
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible
