@@ -81,6 +81,10 @@ tr {
     overflow:auto;
     border: 1px solid black;
 }
+
+#fileDialog {
+    display:none;
+}
 input[type=submit], button {
     cursor: pointer;
     cursor: hand;

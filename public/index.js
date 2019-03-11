@@ -166,7 +166,27 @@ $(document).ready(function() {
 
     //Upload File
     document.getElementById('uploadFile').onclick = function() {
-
+        $('#fileDialog').click();
+        $('#uploadForm').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: formData, 
+                success: function (data) {
+                    $('#statusBox').append("<br>Uploaded file to server");
+                    console.log(data);
+                },
+                fail: function(error) {
+                    // Non-200 return, do something with error
+                    console.log(error); 
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
     };
 
     //Show Show Alarms
