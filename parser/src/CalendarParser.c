@@ -567,6 +567,76 @@ char* eventListToJSON(const List* eventList) {
 	return json;
 }
 
+char *alarmToJSON(const Alarm* alm) {
+
+    return json;
+}
+
+char* alarmListToJSON(const List* alarmList) {
+    //Check for NULL
+    if (alarmList == NULL) {
+        return "[]";
+    }
+    //Check if empty list
+    if ((alarmList->head == NULL) && (alarmList->tail == NULL)) {
+        return "[]";
+    }
+
+    char *json = malloc(sizeof(char) * (2));
+    ListIterator iter = createIterator((List*)alarmList);
+    void* elem;
+    strcpy(json, "[");
+    //Iterate through list of events
+    while((elem = nextElement(&iter)) != NULL) {
+        Alarm *alm = (Alarm*)elem;
+        //Add event json string to new string
+        char *temp = alarmToJSON(alm);
+        json = realloc(json, sizeof(char) * (strlen(temp) + strlen(json) + 2));
+        strcat(json, temp);
+        strcat(json, ",");
+        free(temp);
+    }
+    json = realloc(json, sizeof(char) * (strlen(json) + 2));
+    //Remove trailing , with ]
+    json[strlen(json) - 1] = ']';
+    return json;
+}
+
+char *propToJSON(const Property* prop) {
+
+    return json;
+}
+
+char* propListToJSON(const List* propList) {
+    //Check for NULL
+    if (propList == NULL) {
+        return "[]";
+    }
+    //Check if empty list
+    if ((propList->head == NULL) && (propList->tail == NULL)) {
+        return "[]";
+    }
+
+    char *json = malloc(sizeof(char) * (2));
+    ListIterator iter = createIterator((List*)propList);
+    void* elem;
+    strcpy(json, "[");
+    //Iterate through list of events
+    while((elem = nextElement(&iter)) != NULL) {
+        Property *prop = (Property*)elem;
+        //Add event json string to new string
+        char *temp = propToJSON(prop);
+        json = realloc(json, sizeof(char) * (strlen(temp) + strlen(json) + 2));
+        strcat(json, temp);
+        strcat(json, ",");
+        free(temp);
+    }
+    json = realloc(json, sizeof(char) * (strlen(json) + 2));
+    //Remove trailing , with ]
+    json[strlen(json) - 1] = ']';
+    return json;
+}
+
 char* calendarToJSON(const Calendar* cal) {
 	char *json;
     if (cal == NULL) {

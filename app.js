@@ -149,3 +149,15 @@ app.get('/populateDropDownValid', function(req, res) {
         });
     });
 });
+
+app.get('/validateFileUpload', function(req, res) {
+  let uploadFile = req.theFile;
+  console.log(uploadFile);
+  let valid = sharedLib.validateCalFile(uploadFile);
+  if (valid == "OK") {
+      return res.send({isValid: true});
+  }
+  else {
+    return res.send({isValid: false});
+  }
+});

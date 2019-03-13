@@ -90,6 +90,19 @@ $(document).ready(function() {
 
     //Populate dropdown
     $.ajax({
+        type: 'post',            //Request type
+        url: '/populateDropDownValid',   //The server endpoint we are connecting to
+        success: function (data) {
+            console.log("success");
+
+        },
+        fail: function(error) {
+            // Non-200 return, do something with error
+            console.log("inv file"); 
+        }
+    });
+    //Populate dropdown
+    $.ajax({
         type: 'get',            //Request type
         dataType: 'json',       //Data type - we will use JSON for almost everything 
         url: '/populateDropDownValid',   //The server endpoint we are connecting to
@@ -164,7 +177,26 @@ $(document).ready(function() {
 
 
     $("#fileboi").on("change", function(){
-        $("#submitButton").show();  
+        /*s = document.getElementById('fileboi').value;
+        $.ajax({
+            type: 'get',            //Request type
+            dataType: 'json',       //Data type - we will use JSON for almost everything 
+            url: '/validateFileUpload',   //The server endpoint we are connecting to
+            data: {theFile: s},
+            success: function (info) {
+                if (info.isValid == true) {
+                    $("#submitButton").show(); 
+                }
+                else {
+                    console.log("invalid file");
+                }
+            },
+            fail: function(error) {
+                // Non-200 return, do something with error
+                console.log(error); 
+            }
+        }); */
+        $("#submitButton").show(); 
     })
 
     //Update calViewTable when it changes
