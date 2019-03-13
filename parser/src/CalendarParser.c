@@ -916,3 +916,56 @@ char* printDate(void* toBePrinted) {
     strcat(str, "\0");
     return str;
 }
+
+char *filePanelRow(char *fileName) {
+    char *json;
+    Calendar *cal = malloc(sizeof(Calendar));
+    ICalErrorCode err;
+    err = createCalendar(fileName, &cal);
+    if (err == OK) {
+        if (validateCalendar(cal) == OK) {
+            json = calendarToJSON(cal);
+        }
+        else {
+            json = "{\"version\":\"\",\"prodID\":\"Invalid file\",\"numProps\":\"\",\"numEvents\":\"\"}";
+        }
+    }
+    else {
+        json = "{\"version\":\"\",\"prodID\":\"Invalid file\",\"numProps\":\"\",\"numEvents\":\"\"}";
+    }
+    return json;
+}
+
+char *calViewPanelRow(char *fileName) {
+    char *json;
+    Calendar *cal = malloc(sizeof(Calendar));
+    ICalErrorCode err;
+    printf("%s\n", fileName);
+    err = createCalendar(fileName, &cal);
+    if (err == OK) {
+        if (validateCalendar(cal) == OK) {
+            json = eventListToJSON(cal->events);
+        }
+    }
+    return json;
+}
+
+char *validateCalFile(char *fileName) {
+    Calendar *cal = malloc(sizeof(Calendar));
+
+    ICalErrorCode err;
+
+    err = createCalendar(fileName, &cal);
+    if (err == OK) {
+        if (validateCalendar(cal) == OK) {
+            return "OK";
+        }
+        else {
+            return printError(err);;
+        }
+    }
+    else {
+        return printError(err);
+    }
+    return "OK";
+}

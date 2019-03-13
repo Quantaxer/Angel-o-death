@@ -204,6 +204,12 @@ Event* JSONtoEvent(const char* str);
  **/
 void addEvent(Calendar* cal, Event* toBeAdded);
 
+char *filePanelRow(char *fileName);
+
+char *calViewPanelRow(char *fileName);
+
+char *validateCalFile(char *fileName);
+
 // *********************************************************************
 
 

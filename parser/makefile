@@ -17,7 +17,7 @@ HelperFunctions.o: src/HelperFunctions.c include/HelperFunctions.h
 	gcc -Wall -std=c11 -c -fpic -Iinclude/../include src/HelperFunctions.c -o bin/HelperFunctions.o
 
 libcal.so:	bin/CalendarParser.o
-	gcc -shared -o ../libcal.so bin/CalendarParser.o
+	gcc -shared -o ../libcal.so bin/CalendarParser.o bin/HelperFunctions.o bin/LinkedListAPI.o
 
 clean:
 	rm -rf bin/*.o ./*.so

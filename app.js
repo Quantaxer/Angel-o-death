@@ -83,5 +83,69 @@ app.get('/listFiles', function(req, res) {
     });
 });
 
+//Creates a new calendar
+app.get('/newCal', function(req, res) {
+  const ver = req.query.version;
+  const prodID = req.query.prodID;
+  const filename = req.query.fileName;
+
+  const uid = req.query.uid;
+  const start = req.query.start;
+  const creation = req.query.creation;
+  const summary = req.query.summary;
+});
+
+//Creates a new event
+app.get('/newEvt', function(req, res) {
+  const file = req.files.currentFile;
+  const uid = req.query.uid;
+  const start = req.query.start;
+  const creation = req.query.creation;
+  const summary = req.query.summary;
+});
+
 app.listen(portNum);
 console.log('Running app at localhost: ' + portNum);
+
+
+let sharedLib = ffi.Library('./libcal', {
+  'calViewPanelRow': ['string', ['string']],
+  'filePanelRow': ['string', ['string']],
+  'validateCalFile': ['string', ['string']],
+});
+
+app.get('/populateFileLog', function(req, res) {
+    var json = [];
+    fs.readdir('./uploads', (err, files) => {
+        files.forEach(function(item) {
+            let x = sharedLib.filePanelRow('uploads/' + item);
+            json.push(x);
+        });
+        res.send({listOfRows:json,
+            listOfFiles:files
+        });
+    });
+});
+
+app.get('/populateCalView', function(req, res) {
+    let valid = sharedLib.validateCalFile('uploads/' + req.query.theFile);
+    if (valid == "OK") {
+        var x = sharedLib.calViewPanelRow('uploads/' +  req.query.theFile);
+        res.send({listOfRows:x
+    });
+    }
+});
+
+app.get('/populateDropDownValid', function(req, res) {
+    var json = [];
+    fs.readdir('./uploads', (err, files) => {
+        files.forEach(function(item) {
+            let x = sharedLib.validateCalFile('uploads/' + item);
+            if (x == "OK") {
+              json.push(item);
+            }
+        });
+        res.send({listOfFiles:json,
+        });
+    });
+});
