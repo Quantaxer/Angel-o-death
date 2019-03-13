@@ -203,15 +203,9 @@ Event* JSONtoEvent(const char* str);
  *@param toBeAdded - an Event struct
  **/
 
-char *alarmToJSON(const Alarm* alm);
+char *displayAlarms(char *fileName, int eventNum);
 
-char* alarmListToJSON(const List* alarmList);
-
-char *propToJSON(const Property* prop);
-
-char* propListToJSON(const List* propList);
-
-
+char *displayProps(char *fileName, int eventNum);
 
 void addEvent(Calendar* cal, Event* toBeAdded);
 

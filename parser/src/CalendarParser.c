@@ -567,76 +567,6 @@ char* eventListToJSON(const List* eventList) {
 	return json;
 }
 
-char *alarmToJSON(const Alarm* alm) {
-
-    return json;
-}
-
-char* alarmListToJSON(const List* alarmList) {
-    //Check for NULL
-    if (alarmList == NULL) {
-        return "[]";
-    }
-    //Check if empty list
-    if ((alarmList->head == NULL) && (alarmList->tail == NULL)) {
-        return "[]";
-    }
-
-    char *json = malloc(sizeof(char) * (2));
-    ListIterator iter = createIterator((List*)alarmList);
-    void* elem;
-    strcpy(json, "[");
-    //Iterate through list of events
-    while((elem = nextElement(&iter)) != NULL) {
-        Alarm *alm = (Alarm*)elem;
-        //Add event json string to new string
-        char *temp = alarmToJSON(alm);
-        json = realloc(json, sizeof(char) * (strlen(temp) + strlen(json) + 2));
-        strcat(json, temp);
-        strcat(json, ",");
-        free(temp);
-    }
-    json = realloc(json, sizeof(char) * (strlen(json) + 2));
-    //Remove trailing , with ]
-    json[strlen(json) - 1] = ']';
-    return json;
-}
-
-char *propToJSON(const Property* prop) {
-
-    return json;
-}
-
-char* propListToJSON(const List* propList) {
-    //Check for NULL
-    if (propList == NULL) {
-        return "[]";
-    }
-    //Check if empty list
-    if ((propList->head == NULL) && (propList->tail == NULL)) {
-        return "[]";
-    }
-
-    char *json = malloc(sizeof(char) * (2));
-    ListIterator iter = createIterator((List*)propList);
-    void* elem;
-    strcpy(json, "[");
-    //Iterate through list of events
-    while((elem = nextElement(&iter)) != NULL) {
-        Property *prop = (Property*)elem;
-        //Add event json string to new string
-        char *temp = propToJSON(prop);
-        json = realloc(json, sizeof(char) * (strlen(temp) + strlen(json) + 2));
-        strcat(json, temp);
-        strcat(json, ",");
-        free(temp);
-    }
-    json = realloc(json, sizeof(char) * (strlen(json) + 2));
-    //Remove trailing , with ]
-    json[strlen(json) - 1] = ']';
-    return json;
-}
-
 char* calendarToJSON(const Calendar* cal) {
 	char *json;
     if (cal == NULL) {
@@ -1008,7 +938,7 @@ char *filePanelRow(char *fileName) {
 
 char *calViewPanelRow(char *fileName) {
     char *json;
-    Calendar *cal = malloc(sizeof(Calendar));
+    Calendar *cal;
     ICalErrorCode err;
     printf("%s\n", fileName);
     err = createCalendar(fileName, &cal);
@@ -1021,7 +951,7 @@ char *calViewPanelRow(char *fileName) {
 }
 
 char *validateCalFile(char *fileName) {
-    Calendar *cal = malloc(sizeof(Calendar));
+    Calendar *cal;
 
     ICalErrorCode err;
 
@@ -1038,4 +968,52 @@ char *validateCalFile(char *fileName) {
         return printError(err);
     }
     return "OK";
+}
+
+char *displayAlarms(char *fileName, int eventNum) {
+    Calendar *cal;
+    char *str;
+    int count = 1;
+    ICalErrorCode err;
+    ICalErrorCode err2;
+    err = createCalendar(fileName, &cal);
+    if (err == OK) {
+        err2 = validateCalendar(cal);
+        if (err2 != OK) {
+            return printError(err);
+        }
+        ListIterator iter = createIterator(cal->events);
+        void* elem;
+        while((elem = nextElement(&iter)) != NULL){
+            if (count == eventNum) {
+                Event *evt = (Event*)elem;
+                str = toString(evt->alarms);
+            }
+        }
+    }
+    return str;
+}
+
+char *displayProps(char *fileName, int eventNum) {
+    Calendar *cal;
+    int count = 1;
+    char *str;
+    ICalErrorCode err;
+    ICalErrorCode err2;
+    err = createCalendar(fileName, &cal);
+    if (err == OK) {
+        err2 = validateCalendar(cal);
+        if (err2 != OK) {
+            return printError(err);
+        }
+        ListIterator iter = createIterator(cal->events);
+        void* elem;
+        while((elem = nextElement(&iter)) != NULL){
+            if (count == eventNum) {
+                Event *evt = (Event*)elem;
+                str = toString(evt->properties);
+            }
+        }
+    }
+    return str;
 }

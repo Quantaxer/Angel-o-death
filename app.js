@@ -112,6 +112,8 @@ let sharedLib = ffi.Library('./libcal', {
   'calViewPanelRow': ['string', ['string']],
   'filePanelRow': ['string', ['string']],
   'validateCalFile': ['string', ['string']],
+  'displayAlarms': ['string', ['string', 'int']],
+  'displayProps': ['string', ['string', 'int']],
 });
 
 app.get('/populateFileLog', function(req, res) {
@@ -160,4 +162,18 @@ app.get('/validateFileUpload', function(req, res) {
   else {
     return res.send({isValid: false});
   }
+});
+
+app.get('/showAllProps', function(req, res) {
+  let eventNo = req.theEvent;
+  let fileName = req.theFile;
+  let prop = sharedLib.displayProps(fileName, eventNo);
+  res.send({theString: prop});
+});
+
+app.get('/showAllAlarms', function(req, res) {
+  let eventNo = req.theEvent;
+  let fileName = req.theFile;
+  let alm = sharedLib.displayAlarms(fileName, eventNo);
+  res.send({theString: alm});
 });

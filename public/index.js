@@ -149,6 +149,10 @@ $(document).ready(function() {
             list.forEach(function(item) {
                 let obj = JSON.parse(item);
                 let row = table.rows[i];
+                if (obj.prodID == "Invalid file") {
+                    $('#statusBox').append("<br/>Error: Could not parse file " + row.cells[0].innerHTML);
+
+                }
                 let cell2 = row.insertCell(1);
                 let value2 = document.createTextNode(obj.version);
                 cell2.appendChild(value2);
@@ -265,6 +269,21 @@ $(document).ready(function() {
     //Show Alarms
     document.getElementById('showAlarms').onclick = function() {
         var eventToShow = prompt("Enter the Event Number you wish to see alarms for");
+        var s = $('#viewFiles').children("option:selected").val();
+        if (eventToShow > 0 && eventToShow <= $('#calViewTable tr').length - 1) {
+            $.ajax({
+                type: 'get',            //Request type
+                url: '/populateCalView',   //The server endpoint we are connecting to
+                data: {theFile: s, theEvent: eventToShow},
+                success: function (info) {
+                    
+                },
+                fail: function(error) {
+                    // Non-200 return, do something with error
+                    console.log(error); 
+                }
+            });
+        }
         $('#statusBox').append("<br/>Displaying event number " +eventToShow+":");
     };
 
