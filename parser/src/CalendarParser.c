@@ -491,50 +491,50 @@ char* dtToJSON(DateTime prop) {
 }
 
 char* eventToJSON(const Event* event) {
-	char *json;
-	char *jsonStart = dtToJSON(event->startDateTime);
-	int propCount = 0;
-	int alarmCount = 0;
-	char *summaryString;
-	int didSummary = 0;
-	if (event == NULL) {
+    if (event == NULL) {
         return "{}";
     }
-	//Iterate through list of properties to count how many exist
-	ListIterator iter = createIterator(event->properties);
+    char *json;
+    char *jsonStart = dtToJSON(event->startDateTime);
+    int propCount = 3;
+    int alarmCount = 0;
+    char *summaryString;
+    int didSummary = 0;
+    //Iterate through list of properties to count how many exist
+    ListIterator iter = createIterator(event->properties);
     void* elem;
-  	while((elem = nextElement(&iter)) != NULL){
-  		Property *prop = (Property*)elem;
-  		//Check if summary exists in the list
-  		if (strcmp(prop->propName, "SUMMARY") == 0) {
-  			//Create a temp string for formatting the summary, then append to the real string
-  			summaryString = malloc(sizeof(char) * (3 + strlen(prop->propDescr)));
-  			sprintf(summaryString, "\"%s\"", prop->propDescr);
-  			didSummary = 1;
-  		}
-  		propCount++;
-  	}
-  	//If the summary DNE append 2 ""
-  	if (didSummary == 0) {
-  		summaryString = "\"\"";
-  	}
+    while((elem = nextElement(&iter)) != NULL){
+        Property *prop = (Property*)elem;
+        //Check if summary exists in the list
+        if (strcmp(prop->propName, "SUMMARY") == 0) {
+            //Create a temp string for formatting the summary, then append to the real string
+            summaryString = malloc(sizeof(char) * (3 + strlen(prop->propDescr)));
+            sprintf(summaryString, "\"%s\"", prop->propDescr);
+            didSummary = 1;
+        }
+        propCount++;
+    }
+    //If the summary DNE append 2 ""
+    if (didSummary == 0) {
+        summaryString = "\"\"";
+    }
 
-  	//Iterate through list of alarms to count how many exist
-  	ListIterator iter2 = createIterator(event->alarms);
+    //Iterate through list of alarms to count how many exist
+    ListIterator iter2 = createIterator(event->alarms);
     void* elem2;
-  	while((elem2 = nextElement(&iter2)) != NULL){
-  		alarmCount++;
-  	}
+    while((elem2 = nextElement(&iter2)) != NULL){
+        alarmCount++;
+    }
 
-  	//Allocate memory and format the string
-	json = malloc(sizeof(char) * (50 + strlen(jsonStart) + sizeof(propCount) + sizeof(alarmCount) + strlen(summaryString)));
-	sprintf(json, "{\"startDT\":%s,\"numProps\":%d,\"numAlarms\":%d,\"summary\":%s}", jsonStart, propCount, alarmCount, summaryString);
+    //Allocate memory and format the string
+    json = malloc(sizeof(char) * (50 + strlen(jsonStart) + sizeof(propCount) + sizeof(alarmCount) + strlen(summaryString)));
+    sprintf(json, "{\"startDT\":%s,\"numProps\":%d,\"numAlarms\":%d,\"summary\":%s}", jsonStart, propCount, alarmCount, summaryString);
 
-	free(jsonStart);
+    free(jsonStart);
     if (didSummary == 1) {
         free(summaryString);
     }
-	return json;
+    return json;
 }
 
 char* eventListToJSON(const List* eventList) {
@@ -564,15 +564,15 @@ char* eventListToJSON(const List* eventList) {
     json = realloc(json, sizeof(char) * (strlen(json) + 2));
     //Remove trailing , with ]
     json[strlen(json) - 1] = ']';
-	return json;
+    return json;
 }
 
 char* calendarToJSON(const Calendar* cal) {
-	char *json;
+    char *json;
     if (cal == NULL) {
         return "{}";
     }
-    int propCount = 0;
+    int propCount = 2;
     int eventCount = 0;
     //Iterate through list of properties to count how many exist
     ListIterator iter = createIterator(cal->properties);
@@ -590,7 +590,7 @@ char* calendarToJSON(const Calendar* cal) {
 
     json = malloc(sizeof(char) * (50 + sizeof((int)cal->version) + strlen(cal->prodID) + sizeof(propCount) + sizeof(eventCount)));
     sprintf(json, "{\"version\":%d,\"prodID\":\"%s\",\"numProps\":%d,\"numEvents\":%d}", (int)cal->version, cal->prodID, propCount, eventCount);
-	return json;
+    return json;
 }
 
 Calendar* JSONtoCalendar(const char* str) {
@@ -1016,4 +1016,41 @@ char *displayProps(char *fileName, int eventNum) {
         }
     }
     return str;
+}
+
+char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
+    Calendar *cal = malloc(sizeof(Calendar));
+    cal->version = version;
+    strcpy(cal->prodID, prod);
+    cal->properties = initializeList((*printProperty), (*deleteProperty), (*compareProperties));
+    cal->events = initializeList((*printEvent), (*deleteEvent), (*compareEvents));
+
+    Event *evt = malloc(sizeof(Event));
+    evt->properties = initializeList((*printProperty), (*deleteProperty), (*compareProperties));
+    evt->alarms = initializeList((*printAlarm), (*deleteAlarm), (*compareAlarms));
+    strcpy(evt->UID, uid);
+
+    strcpy(evt->startDateTime.date, startD);
+    strcpy(evt->startDateTime.time, startT);
+    strcpy(evt->creationDateTime.date, createD);
+    strcpy(evt->creationDateTime.time, createT);
+
+    Property *prop = malloc(sizeof(Property));
+    strcpy(prop->propName, "SUMMARY");
+    strcpy(prop->propDescr, summary);
+    insertBack(evt->properties, prop);
+    insertBack(cal->events, evt);
+    printf("%s", printCalendar(cal));
+    ICalErrorCode err = validateCalendar(cal);
+    if (err != OK) {
+        return printError(err);
+    }
+    else {
+        writeCalendar(fileName, cal);
+    }
+    return printCalendar(cal);
+}
+
+void addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
+
 }

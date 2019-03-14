@@ -114,6 +114,8 @@ let sharedLib = ffi.Library('./libcal', {
   'validateCalFile': ['string', ['string']],
   'displayAlarms': ['string', ['string', 'int']],
   'displayProps': ['string', ['string', 'int']],
+  'createNewCalFile': ['string', ['string', 'int', 'string', 'string', 'string', 'string', 'string', 'string', 'string']],
+  'addEvtToCal': ['string', ['string', 'string', 'string', 'string', 'string', 'string', 'string']],
 });
 
 app.get('/populateFileLog', function(req, res) {
@@ -154,7 +156,6 @@ app.get('/populateDropDownValid', function(req, res) {
 
 app.get('/validateFileUpload', function(req, res) {
   let uploadFile = req.theFile;
-  console.log(uploadFile);
   let valid = sharedLib.validateCalFile(uploadFile);
   if (valid == "OK") {
       return res.send({isValid: true});
@@ -165,15 +166,65 @@ app.get('/validateFileUpload', function(req, res) {
 });
 
 app.get('/showAllProps', function(req, res) {
-  let eventNo = req.theEvent;
-  let fileName = req.theFile;
-  let prop = sharedLib.displayProps(fileName, eventNo);
-  res.send({theString: prop});
+  let eventNo = req.query.theEvent;
+  let fileName = req.query.theFile;
+  let prop = sharedLib.displayProps('uploads/' + fileName, eventNo);
+  res.send({theString: prop, theEvt: eventNo});
 });
 
 app.get('/showAllAlarms', function(req, res) {
-  let eventNo = req.theEvent;
-  let fileName = req.theFile;
-  let alm = sharedLib.displayAlarms(fileName, eventNo);
-  res.send({theString: alm});
+  let eventNo = req.query.theEvent;
+  let fileName = req.query.theFile;
+  let alm = sharedLib.displayAlarms('uploads/' + fileName, eventNo);
+  res.send({theString: alm, theEvt: eventNo});
+});
+
+var bodyParse = require('body-parser');
+app.use(bodyParse.urlencoded({extended: true}));
+
+app.post('/newCal', function(req, res) {
+	var ver = req.body.version;
+	var prod = req.body.prodID;
+	var fileName = req.body.fileName;
+	var uid = req.body.uid;
+	var startDate = req.body.start;
+	var creationDate = req.body.creation;
+	var sum = req.body.summary;
+
+	if (!fs.existsSync('uploads/' + fileName)) {
+		if (startDate.length == 15 || startDate.length == 16) {
+			if (!isNaN(startDate.substring(0,8)) && !isNaN(startDate.substring(9,15))) {
+				if (creationDate.length == 15 || creationDate.length == 16) {
+					if (!isNaN(creationDate.substring(0,8)) && !isNaN(creationDate.substring(9,15))) {
+						var s = sharedLib.createNewCalFile('uploads/' + fileName, ver, prod, uid, startDate.substring(0,8), startDate.substring(9,15), creationDate.substring(0,8), creationDate.substring(9,15), sum);
+						res.send({isGood: "OK"});
+					}
+					else {
+						return res.status(500).send("Invalid file");
+					}
+				}
+				else {
+					return res.status(500).send("Invalid file");
+				}
+			}
+			else {
+				return res.status(500).send("Invalid file");
+			}
+		}
+		else {
+			return res.status(500).send("Invalid file");
+		}
+	}
+	else {
+      	return res.status(500).send("File name already exists in the server");
+	}
+});
+
+app.post('/newEvt', function(req, res) {
+	var uid = req.body.uid;
+	var startDate = req.body.start;
+	var creationDate = req.body.creation;
+	var sum = req.body.summary;
+	var file = req.body.currentFile;
+
 });

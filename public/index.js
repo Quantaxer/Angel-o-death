@@ -137,38 +137,38 @@ $(document).ready(function() {
                 let value = document.createTextNode("No files");
                 cell.appendChild(value);
             }
-            fileName.forEach(function(item) {
-                let row = table.insertRow(table.rows.length);
-                let cell = row.insertCell(0);
-                var string = [];
-                string.push('<a href = \"uploads/', escape(item), '\"">', escape(item), '</a>');
-                cell.innerHTML = string.join('');
-
-            });
             let i = 1;
             list.forEach(function(item) {
                 let obj = JSON.parse(item);
-                let row = table.rows[i];
+
                 if (obj.prodID == "Invalid file") {
-                    $('#statusBox').append("<br/>Error: Could not parse file " + row.cells[0].innerHTML);
-
+                    $('#statusBox').append("<br/>Error: Could not parse file " + fileName[i - 1]);
+                    i++;
                 }
-                let cell2 = row.insertCell(1);
-                let value2 = document.createTextNode(obj.version);
-                cell2.appendChild(value2);
+                else {
+                    let row = table.insertRow(table.rows.length);
+                    let cell = row.insertCell(0);
+                    var string = [];
+                    string.push('<a href = \"uploads/', escape(fileName[i - 1]), '\"">', escape(fileName[i - 1]), '</a>');
+                    cell.innerHTML = string.join('');
 
-                let cell3 = row.insertCell(2);
-                let value3 = document.createTextNode(obj.prodID);
-                cell3.appendChild(value3);
+                    let cell2 = row.insertCell(1);
+                    let value2 = document.createTextNode(obj.version);
+                    cell2.appendChild(value2);
 
-                let cell4 = row.insertCell(3);
-                let value4 = document.createTextNode(obj.numEvents);
-                cell4.appendChild(value4);
+                    let cell3 = row.insertCell(2);
+                    let value3 = document.createTextNode(obj.prodID);
+                    cell3.appendChild(value3);
 
-                let cell5 = row.insertCell(4);
-                let value5 = document.createTextNode(obj.numProps);
-                cell5.appendChild(value5);
-                i++;
+                    let cell4 = row.insertCell(3);
+                    let value4 = document.createTextNode(obj.numEvents);
+                    cell4.appendChild(value4);
+
+                    let cell5 = row.insertCell(4);
+                    let value5 = document.createTextNode(obj.numProps);
+                    cell5.appendChild(value5);
+                    i++;
+                }
             });
 
 
@@ -269,14 +269,16 @@ $(document).ready(function() {
     //Show Alarms
     document.getElementById('showAlarms').onclick = function() {
         var eventToShow = prompt("Enter the Event Number you wish to see alarms for");
-        var s = $('#viewFiles').children("option:selected").val();
         if (eventToShow > 0 && eventToShow <= $('#calViewTable tr').length - 1) {
+            var s = $('#viewFiles').children("option:selected").val();
             $.ajax({
                 type: 'get',            //Request type
-                url: '/populateCalView',   //The server endpoint we are connecting to
+                url: '/showAllAlarms',   //The server endpoint we are connecting to
                 data: {theFile: s, theEvent: eventToShow},
                 success: function (info) {
-                    
+                    var almStr = info.theString;
+                    var evt = info.theEvt;
+                    $('#statusBox').append("<br/>Displaying list of alarms for event " + evt + ":" + almStr);
                 },
                 fail: function(error) {
                     // Non-200 return, do something with error
@@ -284,13 +286,34 @@ $(document).ready(function() {
                 }
             });
         }
-        $('#statusBox').append("<br/>Displaying event number " +eventToShow+":");
+        else {
+            $('#statusBox').append("<br/>Invalid event number when trying to view list of alarms");
+        }
     };
 
     //Show Props
     document.getElementById('showProps').onclick = function() {
-        var propsToShow = prompt("Enter the Event Number you wish to see properties for");
-        $('#statusBox').append("<br/>Displaying event number " +propsToShow+":");
+        var eventToShow = prompt("Enter the Event Number you wish to see alarms for");
+        var s = $('#viewFiles').children("option:selected").val();
+        if (eventToShow > 0 && eventToShow <= $('#calViewTable tr').length - 1) {
+            $.ajax({
+                type: 'get',            //Request type
+                url: '/showAllProps',   //The server endpoint we are connecting to
+                data: {theFile: s, theEvent: eventToShow},
+                success: function (info) {
+                    var evt = info.theEvt;
+                    propStr = info.theString;
+                    $('#statusBox').append("<br/>Displaying list of properties for event " +evt+":" + propStr);
+                },
+                fail: function(error) {
+                    // Non-200 return, do something with error
+                    console.log(error); 
+                }
+            });
+        }
+        else {
+            $('#statusBox').append("<br/>Invalid event number when trying to view list of properties");
+        }
     };
 
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible

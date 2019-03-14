@@ -62,7 +62,8 @@ tr {
 }
 
 #statusPanel {
-    text-align: center;
+    text-align: left;
+    white-space: nowrap;
     padding: 10px;
 }
 

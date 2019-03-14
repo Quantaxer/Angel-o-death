@@ -38,7 +38,7 @@
     </table>
 
     <form action='/upload' method='POST' enctype='multipart/form-data'>
-        <input type="file" name="fileboi" id = "fileboi">
+        <input type="file" name="fileboi" id = "fileboi" accept=".ics">
         <input type="submit" value = "upload" id = "submitButton"> 
     </form>
 
@@ -64,25 +64,25 @@
 
     <hr>
     <div style='float: left;'>
-        <form action = '/newCal' method='get' id = "createCal">
-            Version: <input type="text" name="version">
-            <br>Product ID: <input type="text" name="prodID">
-            <br>File Name: <input type= "text" name="fileName">
+        <form action = '/newCal' method='post' id = "createCal">
+            Version: <input type="text" name="version" id="version" required>
+            <br>Product ID: <input type="text" name="prodID" required>
+            <br>File Name: <input type= "text" name="fileName" required>
             <br><b>Event</b>
-            <br>UID: <input type="text" name="uid">
-            <br>Start Date: <input type="text" name="start">
-            <br>Creation Date: <input type="text" name="creation">
-            <br>Summary: <input type="text" name="summary">
+            <br>UID: <input type="text" name="uid" required>
+            <br>Start Date: <input type="text" name="start" required>
+            <br>Creation Date: <input type="text" name="creation" required>
+            <br>Summary: <input type="text" name="summary" required>
             <br><input type = "submit" value = "Create Calendar">
         </form>
     </div>
 
     <div style = 'float: right;'>
-        <form action = '/newEvt' method='get' id = "createEvt">
-            UID: <input type="text" name="uid">
-            <br>Start Date: <input type="text" name="start">
-            <br>Creation Date: <input type="text" name="creation">
-            <br>Summary: <input type="text" name="summary">
+        <form action = '/newEvt' method='post' id = "createEvt">
+            UID: <input type="text" name="uid" required>
+            <br>Start Date: <input type="text" name="start" required>
+            <br>Creation Date: <input type="text" name="creation" required>
+            <br>Summary: <input type="text" name="summary" required>
             <br>Choose a file to add to:<select name ="currentFile" id = "listOfFiles"></select>
             <br><input type = "submit" value = "Create Event">
         </form>
