@@ -1052,5 +1052,34 @@ char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char 
 }
 
 void addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
+    Calendar *cal;
+    createCalendar(fileName, cal);
+
+    Event *evt = malloc(sizeof(Event));
+
+    evt->properties = initializeList((*printProperty), (*deleteProperty), (*compareProperties));
+    evt->alarms = initializeList((*printAlarm), (*deleteAlarm), (*compareAlarms));
+    strcpy(evt->UID, uid);
+
+    strcpy(evt->startDateTime.date, startD);
+    strcpy(evt->startDateTime.time, startT);
+    strcpy(evt->creationDateTime.date, createD);
+    strcpy(evt->creationDateTime.time, createT);
+
+    Property *prop = malloc(sizeof(Property));
+    strcpy(prop->propName, "SUMMARY");
+    strcpy(prop->propDescr, summary);
+    insertBack(evt->properties, prop);
+    insertBack(cal->events, evt);
+    addEvent(cal, evt);
+
+    ICalErrorCode err = validateCalendar(cal);
+    if (err != OK) {
+        return printError(err);
+    }
+    else {
+        writeCalendar(fileName, cal);
+    }
+    return printCalendar(cal);
 
 }

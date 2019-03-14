@@ -197,7 +197,7 @@ app.post('/newCal', function(req, res) {
 				if (creationDate.length == 15 || creationDate.length == 16) {
 					if (!isNaN(creationDate.substring(0,8)) && !isNaN(creationDate.substring(9,15))) {
 						var s = sharedLib.createNewCalFile('uploads/' + fileName, ver, prod, uid, startDate.substring(0,8), startDate.substring(9,15), creationDate.substring(0,8), creationDate.substring(9,15), sum);
-						res.send({isGood: "OK"});
+						res.redirect('/');
 					}
 					else {
 						return res.status(500).send("Invalid file");
@@ -225,6 +225,33 @@ app.post('/newEvt', function(req, res) {
 	var startDate = req.body.start;
 	var creationDate = req.body.creation;
 	var sum = req.body.summary;
-	var file = req.body.currentFile;
+	var fileName = req.body.currentFile;
 
+	if (!fs.existsSync('uploads/' + fileName)) {
+		if (startDate.length == 15 || startDate.length == 16) {
+			if (!isNaN(startDate.substring(0,8)) && !isNaN(startDate.substring(9,15))) {
+				if (creationDate.length == 15 || creationDate.length == 16) {
+					if (!isNaN(creationDate.substring(0,8)) && !isNaN(creationDate.substring(9,15))) {
+						var s = sharedLib.addEvtToCal('uploads/' + fileName, uid, startDate.substring(0,8), startDate.substring(9,15), creationDate.substring(0,8), creationDate.substring(9,15), sum);
+						res.redirect('/');
+					}
+					else {
+						return res.status(500).send("Invalid file");
+					}
+				}
+				else {
+					return res.status(500).send("Invalid file");
+				}
+			}
+			else {
+				return res.status(500).send("Invalid file");
+			}
+		}
+		else {
+			return res.status(500).send("Invalid file");
+		}
+	}
+	else {
+      	return res.status(500).send("File name already exists in the server");
+	}
 });

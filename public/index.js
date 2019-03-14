@@ -316,6 +316,19 @@ $(document).ready(function() {
         }
     };
 
+     $.ajax({
+        type: 'post',            //Request type
+        url: '/newCal',   //The server endpoint we are connecting to
+        data: {theFile: s, theEvent: eventToShow},
+        success: function (info) {
+            $('#statusBox').append("<br/>Created new calendar");
+        },
+        fail: function(error) {
+            // Non-200 return, do something with error
+            $('#statusBox').append("<br/>" + error);
+        }
+    });
+
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible
     /*$('#someform').submit(function(e){
         $('#blah').html("Callback from the form");
