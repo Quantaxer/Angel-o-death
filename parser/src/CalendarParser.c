@@ -855,12 +855,12 @@ char* printAlarm(void* toBePrinted) {
     Alarm *alm = (Alarm*)toBePrinted;
     char *str;
     char *tempProp = toString(alm->properties);
-    str = malloc(sizeof(char) * (strlen(alm->action) + strlen(alm->trigger) + strlen(tempProp) + 32));
+    str = malloc(sizeof(char) * (strlen(alm->action) + strlen(alm->trigger) + strlen(tempProp) + 40));
     strcpy(str, "Action: ");
     strcat(str, alm->action);
     strcat(str, " Trigger: ");
     strcat(str, alm->trigger);
-    strcat(str, "\nProperties: ");
+    strcat(str, "\n[Properties: ");
     strcat(str, tempProp);
     free(tempProp);
     return str;
@@ -989,6 +989,7 @@ char *displayAlarms(char *fileName, int eventNum) {
                 Event *evt = (Event*)elem;
                 str = toString(evt->alarms);
             }
+            count++;
         }
     }
     return str;
@@ -1011,8 +1012,15 @@ char *displayProps(char *fileName, int eventNum) {
         while((elem = nextElement(&iter)) != NULL){
             if (count == eventNum) {
                 Event *evt = (Event*)elem;
-                str = toString(evt->properties);
+                char *temp = toString(evt->properties);
+                str = malloc(sizeof(char) * (strlen(temp) + 20));
+                strcpy(str, "[");
+                strcat(str, temp);
+                strcat(str, "]");
+                free(temp);
+                printf("%s\n", str);
             }
+            count++;
         }
     }
     return str;
@@ -1051,9 +1059,9 @@ char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char 
     return printCalendar(cal);
 }
 
-void addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
+char *addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
     Calendar *cal;
-    createCalendar(fileName, cal);
+    createCalendar(fileName, &cal);
 
     Event *evt = malloc(sizeof(Event));
 
@@ -1070,7 +1078,6 @@ void addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *cr
     strcpy(prop->propName, "SUMMARY");
     strcpy(prop->propDescr, summary);
     insertBack(evt->properties, prop);
-    insertBack(cal->events, evt);
     addEvent(cal, evt);
 
     ICalErrorCode err = validateCalendar(cal);

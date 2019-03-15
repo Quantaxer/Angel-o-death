@@ -49,8 +49,18 @@ tr {
     background-color: white;
 }
 
-#submitButton {
-    display:none;
+.contain {
+    width: 300px;
+}
+
+.contain input {
+    width: 100%;
+    clear:both;
+}
+
+.inputItems {
+    width:80%;
+    padding:10px;
 }
 
 #createContainer {
@@ -61,10 +71,16 @@ tr {
     padding: 20px;
 }
 
+.btn {
+    width:400px;
+    height:40px;
+
+}
+
 #statusPanel {
     text-align: left;
     white-space: nowrap;
-    padding: 10px;
+    padding: 5px;
 }
 
 #fileLogPanel {
@@ -73,6 +89,8 @@ tr {
 
 #calendarPanel {
     padding:20px;
+    width:1000px;
+    height:200px;
 }
 #statusBox {
     width: 1000px;

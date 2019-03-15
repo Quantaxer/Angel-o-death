@@ -36,12 +36,12 @@
         <th>Number of<br/>Properties</th>
     </tr>
     </table>
-
+    <center>
     <form action='/upload' method='POST' enctype='multipart/form-data'>
-        <input type="file" name="fileboi" id = "fileboi" accept=".ics">
+        <input type="file" name="fileboi" id = "fileboi" accept=".ics" required>
         <input type="submit" value = "upload" id = "submitButton"> 
     </form>
-
+    </center>
     <hr>
     <CENTER><B>Calendar View Panel</B></CENTER>
     <hr>
@@ -63,29 +63,31 @@
     </div>
 
     <hr>
-    <div style='float: left;'>
-        <form action = '/newCal' method='post' id = "createCal">
-            Version: <input type="text" name="version" id="version" required>
-            <br>Product ID: <input type="text" name="prodID" required>
-            <br>File Name: <input type= "text" name="fileName" required>
-            <br><b>Event</b>
-            <br>UID: <input type="text" name="uid" required>
-            <br>Start Date: <input type="text" name="start" required>
-            <br>Creation Date: <input type="text" name="creation" required>
-            <br>Summary: <input type="text" name="summary" required>
-            <br><input type = "submit" value = "Create Calendar">
-        </form>
-    </div>
+    <div class = "inputItems">
+        <div style='float: left;' class = "contain">
+            <form action = '/newCal' method='post' id = "createCal">
+                Version: <input type="text" name="version" id="version" required>
+                <br>Product ID: <input type="text" name="prodID" required>
+                <br>File Name: <input type= "text" name="fileName" required>
+                <br><b>Event</b>
+                <br>UID: <input type="text" name="uid" required>
+                <br>Start Date: <input type="text" name="start" required>
+                <br>Creation Date: <input type="text" name="creation" required>
+                <br>Summary: <input type="text" name="summary" required>
+                <br><input type = "submit" value = "Create Calendar">
+            </form>
+        </div>
 
-    <div style = 'float: right;'>
-        <form action = '/newEvt' method='post' id = "createEvt">
-            UID: <input type="text" name="uid" required>
-            <br>Start Date: <input type="text" name="start" required>
-            <br>Creation Date: <input type="text" name="creation" required>
-            <br>Summary: <input type="text" name="summary" required>
-            <br>Choose a file to add to:<select name ="currentFile" id = "listOfFiles"></select>
-            <br><input type = "submit" value = "Create Event">
-        </form>
+        <div style = 'float: right;' class = "contain">
+            <form action = '/newEvt' method='post' id = "createEvt">
+                UID: <input type="text" name="uid" required>
+                <br>Start Date: <input type="text" name="start" required>
+                <br>Creation Date: <input type="text" name="creation" required>
+                <br>Summary: <input type="text" name="summary" required>
+                <br>Choose a file to add to:<select name ="currentFile" id = "listOfFiles"></select>
+                <br><input type = "submit" value = "Create Event">
+            </form>
+        </div>
     </div>
     <!-- Leave me at the bottom of body -->
     <script src="/index.js"></script>

@@ -180,29 +180,6 @@ $(document).ready(function() {
     });
 
 
-    $("#fileboi").on("change", function(){
-        /*s = document.getElementById('fileboi').value;
-        $.ajax({
-            type: 'get',            //Request type
-            dataType: 'json',       //Data type - we will use JSON for almost everything 
-            url: '/validateFileUpload',   //The server endpoint we are connecting to
-            data: {theFile: s},
-            success: function (info) {
-                if (info.isValid == true) {
-                    $("#submitButton").show(); 
-                }
-                else {
-                    console.log("invalid file");
-                }
-            },
-            fail: function(error) {
-                // Non-200 return, do something with error
-                console.log(error); 
-            }
-        }); */
-        $("#submitButton").show(); 
-    })
-
     //Update calViewTable when it changes
     $('#viewFiles').on('change', function() {
         var s = $('#viewFiles').children("option:selected").val();

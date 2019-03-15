@@ -217,7 +217,7 @@ char *validateCalFile(char *fileName);
 
 char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char *startD, char * startT, char *createD, char* createT, char *summary);
 
-void addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary);
+char *addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary);
 
 // *********************************************************************
 
