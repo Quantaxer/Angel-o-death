@@ -1,5 +1,4 @@
 html {
-    width: 60%;
     height: 100%;
     min-height: 100%;
     margin: 0 auto;
@@ -22,7 +21,7 @@ a:link:hover {
 }
 table {
     display:block;
-    font-family: calibri;
+    font-family: sans-serif;
     overflow-x:scroll;
     overflow-y:scroll;
     align-self: center;
@@ -30,15 +29,17 @@ table {
     height: 400px;
 }
 th {
-    padding:5px;
+    padding:2px 10px;
     text-align: center;
     border: 1px solid black;
-    background-color: #dddddd;
+    background-color: rgba(0, 128, 128, .15);
+    min-width:100px;
 }
 
 td {
     text-align: center;
     border: 1px solid black;
+    padding: 2px 10px;
     background-color: white;
 }
 
@@ -47,6 +48,59 @@ tr {
     text-align: center;
     border: 1px solid black;
     background-color: white;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    color:white;
+    background: teal;
+    font-family: sans-serif;
+}
+
+.sidebar {
+    padding: 6px 8px 6px 16px;
+    font-size: 25px;
+    color:white;
+    font-family: sans-serif;
+    position: fixed;
+    z-index: 1;
+    top:100px;
+    background: teal;
+    overflow-x: hidden;
+    height: 100%;
+    width: 230px;
+}
+
+.main {
+    width:100%;
+    margin: 230px;
+    padding-left: 5px;
+}
+
+.header {
+    position: fixed;
+    width:100%;
+    top: 0;
+    z-index: 0;
+}
+
+.subheader {
+    font-family: sans-serif;
+    color: white;
+    font-size: 22px;
+    background-image: linear-gradient(to left, white, cadetblue, white);
+    padding:5px;    
+}
+
+#head {
+    padding-top:10px;
+    font-size:50px;
+}
+
+#name {
+    padding-bottom:10px;
+    font-size:20px;
 }
 
 .contain {
@@ -74,7 +128,7 @@ tr {
 .btn {
     width:400px;
     height:40px;
-
+    font-family: sans-serif;
 }
 
 #statusPanel {
@@ -92,12 +146,15 @@ tr {
     width:1000px;
     height:200px;
 }
+
 #statusBox {
     width: 1000px;
     height: 200px;
     padding: 10px;
     align-self: center;
-    background-color: #F5F5F5;
+    background-color: rgba(0, 128, 128, .15);
+    font-size: 18px;
+    color:black;
     overflow:auto;
     border: 1px solid black;
 }
