@@ -17,12 +17,14 @@
     <!-- Custom CSS End -->
 </head>
 <body>
-
     <div class = "sidebar">
         <br>
-        <label>Create Calendar</label>
-        <label>Add Event</label>
-
+        <center>
+            <label id = "fileButton" class = "sidebtn">File Log Panel</label>
+            <label id = "calButton" class = "sidebtn">Calendar View Panel</label>
+            <label id = "cCalButton" class = "sidebtn">Create Calendar</label>
+            <label id = "aEventButton" class = "sidebtn">Add Event</label>
+        </center>
     </div>
     <div class = "header">
         <header>
@@ -41,75 +43,91 @@
             Nothing here yet
         </div>
         </i>
+        <br>
         <button id="clearStatus" type="button" class="btn">Clear</button></CENTER>
         <br>
-
-
-        <div class="subheader">
-            <CENTER><B>File Log Panel</B></CENTER>
-        </div>
-        <br>
-       <table align=center id = 'fileLogTable'>
-        <tr>
-            <th style = "min-width: 205px">File Name<br/>(click to download)</th>
-            <th>Version</th>
-            <th style = "min-width: 450px">Product ID</th>
-            <th>Number of<br/>Events</th>
-            <th>Number of<br/>Properties</th>
-        </tr>
-        </table>
-        <center>
-        <form action='/upload' method='POST' enctype='multipart/form-data'>
-            <input type="file" name="fileboi" id = "fileboi" accept=".ics" required>
-            <input type="submit" value = "upload" id = "submitButton"> 
-        </form>
-        <br>
-        </center>
-        <div class = "subheader">
-            <CENTER><B>Calendar View Panel</B></CENTER>
-        </div>
-        <select id = 'viewFiles'></select>
-        <table align = center id = 'calViewTable'>
-            <tr>
-                <th>Event No</th>
-                <th>Start Date</th>
-                <th>Start Time</th>
-                <th style = "min-width: 450px">Summary</th>
-                <th>Props</th>
-                <th>Alarms</th>
-            </tr>
-        </table>
-        <div id = "container">
-            <button id="showAlarms" type="button" class="btn">Show Alarms</button>
-            <button id="showProps" type="button" class="btn">Show Props</button>
-        </div>
-
         <hr>
-        <div class = "inputItems">
-            <div style='float: left;' class = "contain">
+        <div style="display:none" class ="fileLog">
+            <div class="subheader">
+                <CENTER><B>File Log Panel</B></CENTER>
+            </div>
+            <br>
+           <table align=center id = 'fileLogTable'>
+            <tr>
+                <th style = "min-width: 205px">File Name<br/>(click to download)</th>
+                <th>Version</th>
+                <th style = "min-width: 450px">Product ID</th>
+                <th>Number of<br/>Events</th>
+                <th>Number of<br/>Properties</th>
+            </tr>
+            </table>
+            <center>
+            <form action='/upload' method='POST' enctype='multipart/form-data'>
+                <input type="file" name="fileboi" id = "fileboi" accept=".ics" required>
+                <input type="submit" value = "upload" id = "submitButton"> 
+            </form>
+            <br>
+            </center>
+            <hr>
+        </div>
+        <div style="display:none" class = "calView">
+            <div class = "subheader">
+                <CENTER><B>Calendar View Panel</B></CENTER>
+            </div>
+            <select id = 'viewFiles'></select>
+            <table align = center id = 'calViewTable'>
+                <tr>
+                    <th>Event No</th>
+                    <th>Start Date</th>
+                    <th>Start Time</th>
+                    <th style = "min-width: 450px">Summary</th>
+                    <th>Props</th>
+                    <th>Alarms</th>
+                </tr>
+            </table>
+            <div id = "container">
+                <button id="showAlarms" type="button" class="btn">Show Alarms</button>
+                <button id="showProps" type="button" class="btn">Show Props</button>
+            </div>
+            <hr>
+        </div>
+
+        <div style="display:none" class = "cCal">
+            <div class = "subheader">
+                <CENTER><B><label">Create Calendar</label></B></CENTER>
+            </div>
+            <br>
+            <div class = "contain">
                 <form action = '/newCal' method='post' id = "createCal">
-                    Version: <input type="text" name="version" id="version" required>
-                    <br>Product ID: <input type="text" name="prodID" required>
-                    <br>File Name: <input type= "text" name="fileName" required>
-                    <br><b>Event</b>
-                    <br>UID: <input type="text" name="uid" required>
-                    <br>Start Date: <input type="text" name="start" required>
-                    <br>Creation Date: <input type="text" name="creation" required>
-                    <br>Summary: <input type="text" name="summary" required>
-                    <br><input type = "submit" value = "Create Calendar">
+                    Version:<br> <input type="text" name="version" id="version" required>
+                    <br>Product ID:<br> <input type="text" name="prodID" required>
+                    <br>File Name:<br> <input type= "text" name="fileName" required>
+                    <br><br><b>Event</b>
+                    <br>UID:<br> <input type="text" name="uid" required>
+                    <br>Start Date:<br> <input type="text" name="start" required>
+                    <br>Creation Date:<br> <input type="text" name="creation" required>
+                    <br>Summary:<br> <input type="text" name="summary" required>
+                    <br><br><input type = "submit" value = "Create Calendar">
                 </form>
             </div>
-
-            <div style = 'float: right;' class = "contain">
+            <hr>
+        </div>
+        <div style="display:none" class = "aEvent">
+            <div class = "subheader">
+                <CENTER><B><label">Create & Add Event</label></B></CENTER>
+            </div>
+            <br>
+            <div class = "contain">
                 <form action = '/newEvt' method='post' id = "createEvt">
-                    UID: <input type="text" name="uid" required>
-                    <br>Start Date: <input type="text" name="start" required>
-                    <br>Creation Date: <input type="text" name="creation" required>
-                    <br>Summary: <input type="text" name="summary" required>
+                    UID: <br><input type="text" name="uid" required>
+                    <br>Start Date: <br><input type="text" name="start" required>
+                    <br>Creation Date: <br><input type="text" name="creation" required>
+                    <br>Summary:<br> <input type="text" name="summary" required>
                     <br>Choose a file to add to:<select name ="currentFile" id = "listOfFiles"></select>
                     <br><input type = "submit" value = "Create Event">
                 </form>
             </div>
+            <hr>
         </div>
     </div>
     <!-- Leave me at the bottom of body -->

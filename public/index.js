@@ -293,17 +293,32 @@ $(document).ready(function() {
         }
     };
 
-     $.ajax({
-        type: 'post',            //Request type
-        url: '/newCal',   //The server endpoint we are connecting to
-        data: {theFile: s, theEvent: eventToShow},
-        success: function (info) {
-            $('#statusBox').append("<br/>Created new calendar");
-        },
-        fail: function(error) {
-            // Non-200 return, do something with error
-            $('#statusBox').append("<br/>" + error);
-        }
+    $("#fileButton").click(function() {
+        $(".fileLog").show();
+        $(".calView").hide();
+        $(".cCal").hide();
+        $(".aEvent").hide();
+    });
+
+    $("#calButton").click(function() {
+        $(".fileLog").hide();
+        $(".calView").show();
+        $(".cCal").hide();
+        $(".aEvent").hide();
+    });
+
+    $("#cCalButton").click(function() {
+        $(".fileLog").hide();
+        $(".calView").hide();
+        $(".cCal").show();
+        $(".aEvent").hide();
+    });
+
+    $("#aEventButton").click(function() {
+        $(".fileLog").hide();
+        $(".calView").hide();
+        $(".cCal").hide();
+        $(".aEvent").show();
     });
 
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible
