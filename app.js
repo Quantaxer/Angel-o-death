@@ -191,6 +191,12 @@ app.post('/newCal', function(req, res) {
 	var creationDate = req.body.creation;
 	var sum = req.body.summary;
 
+	var extensionCheck = fileName.split('.').pop();
+
+	if (extensionCheck != "ics") {
+		return res.status(500).send("Invalid file extension");
+	}
+
 	if (!fs.existsSync('uploads/' + fileName)) {
 		if (startDate.length == 15 || startDate.length == 16) {
 			if (!isNaN(startDate.substring(0,8)) && !isNaN(startDate.substring(9,15))) {

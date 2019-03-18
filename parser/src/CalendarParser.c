@@ -855,13 +855,14 @@ char* printAlarm(void* toBePrinted) {
     Alarm *alm = (Alarm*)toBePrinted;
     char *str;
     char *tempProp = toString(alm->properties);
-    str = malloc(sizeof(char) * (strlen(alm->action) + strlen(alm->trigger) + strlen(tempProp) + 40));
+    str = malloc(sizeof(char) * (strlen(alm->action) + strlen(alm->trigger) + strlen(tempProp) + 41));
     strcpy(str, "Action: ");
     strcat(str, alm->action);
     strcat(str, " Trigger: ");
     strcat(str, alm->trigger);
     strcat(str, "\n[Properties: ");
     strcat(str, tempProp);
+    strcat(str, "]");
     free(tempProp);
     return str;
 }
@@ -940,7 +941,6 @@ char *calViewPanelRow(char *fileName) {
     char *json;
     Calendar *cal;
     ICalErrorCode err;
-    printf("%s\n", fileName);
     err = createCalendar(fileName, &cal);
     if (err == OK) {
         if (validateCalendar(cal) == OK) {
@@ -967,6 +967,7 @@ char *validateCalFile(char *fileName) {
     else {
         return printError(err);
     }
+    deleteCalendar(cal);
     return "OK";
 }
 
@@ -992,6 +993,7 @@ char *displayAlarms(char *fileName, int eventNum) {
             count++;
         }
     }
+    deleteCalendar(cal);
     return str;
 }
 
@@ -1018,17 +1020,18 @@ char *displayProps(char *fileName, int eventNum) {
                 strcat(str, temp);
                 strcat(str, "]");
                 free(temp);
-                printf("%s\n", str);
             }
             count++;
         }
     }
+    deleteCalendar(cal);
     return str;
 }
 
 char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
     Calendar *cal = malloc(sizeof(Calendar));
     cal->version = version;
+    char *str;
     strcpy(cal->prodID, prod);
     cal->properties = initializeList((*printProperty), (*deleteProperty), (*compareProperties));
     cal->events = initializeList((*printEvent), (*deleteEvent), (*compareEvents));
@@ -1048,7 +1051,6 @@ char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char 
     strcpy(prop->propDescr, summary);
     insertBack(evt->properties, prop);
     insertBack(cal->events, evt);
-    printf("%s", printCalendar(cal));
     ICalErrorCode err = validateCalendar(cal);
     if (err != OK) {
         return printError(err);
@@ -1056,11 +1058,14 @@ char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char 
     else {
         writeCalendar(fileName, cal);
     }
-    return printCalendar(cal);
+
+    str = printCalendar(cal);
+    return str;
 }
 
 char *addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary) {
     Calendar *cal;
+    char *str;
     createCalendar(fileName, &cal);
 
     Event *evt = malloc(sizeof(Event));
@@ -1087,6 +1092,6 @@ char *addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *c
     else {
         writeCalendar(fileName, cal);
     }
-    return printCalendar(cal);
-
+    str = printCalendar(cal);
+    return str;
 }
