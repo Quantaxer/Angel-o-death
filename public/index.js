@@ -321,7 +321,7 @@ $(document).ready(function() {
         $(".fileLog").hide();
         $(".calView").hide();
         $(".cCal").hide();
-        $("#dbButton").hide();
+        $(".database").hide();
         $(".aEvent").show();
     });
 
@@ -331,6 +331,27 @@ $(document).ready(function() {
         $(".cCal").hide();
         $(".aEvent").hide();
         $(".database").show();
+    });
+
+    $("#dbLoginButton").click(function() {
+        event.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: '/dbUserInfo',
+            dataType: 'html',
+            data: {username: $("#username").val(), pw: $("#pw").val(), dbName: $("#dbName").val()},
+            success: function (data) {
+                if (data == "good") {
+                    $(".databaseOperations").show();
+                }
+                else if (data == "badCred") {
+                    alert("Unable to connect to the database, please check credentials");
+                }
+                else if (data == "badSQL") {
+                    alert("oopsie woopsie, mysql made a fucky wucky");
+                }
+            },
+        });
     });
 
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible

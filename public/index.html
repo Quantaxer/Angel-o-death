@@ -131,12 +131,15 @@
             <hr>
         </div>
         <div style="display:none" class ="database">
-            <form action = '/dbUserInfo' method='post' id = "createCal">
+            <form action = '/dbUserInfo' method='post' id = "dbLogin">
                 Username:<br> <input type="text" name="username" id="username" required>
-                <br>Password:<br> <input type="text" name="pw" required>
-                <br>Database Name:<br> <input type= "text" name="dbName" required>
-                <br><br><input type = "submit" value = "Create Calendar">
+                <br>Password:<br> <input type="password" name="pw" id = "pw" required>
+                <br>Database Name:<br> <input type= "text" name="dbName" id = "dbName" required>
+                <br><br><input type = "submit" value = "Login" id = "dbLoginButton">
             </form>
+            <div style="display:none" class = "databaseOperations">
+                <hr>db stuff here<hr>
+            </div>
 
         </div>
     </div>
