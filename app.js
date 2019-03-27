@@ -256,3 +256,41 @@ app.post('/newEvt', function(req, res) {
 		return res.status(500).send("Invalid file");
 	}
 });
+
+const mysql = require('mysql');
+
+app.post('/dbUserInfo', function(req, res) {
+	var userN = req.body.username;
+	var pass = req.body.pw;
+	var name = req.body.dbName;
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect(function(err) {
+		if (err) {
+			res.status(500).send("Error connecting to database, check credentials");
+		}
+
+		connection.query("CREATE TABLE IF NOT EXISTS FILE (cal_id INT AUTO_INCREMENT PRIMARY KEY, file_Name VARCHAR(60) NOT NULL, version INT NOT NULL, prod_id VARCHAR(256) NOT NULL)", function(err, rows, fields) {
+			if (err) {
+				res.status(500).send("oopsie woopsie");
+			}
+		});
+
+		connection.query("CREATE TABLE IF NOT EXISTS EVENT (event_id INT AUTO_INCREMENT PRIMARY KEY, summary VARCHAR(1024), start_time DATETIME NOT NULL, location VARCHAR(60), organizer VARCHAR(256), cal_file INT NOT NULL, FOREIGN KEY(cal_file) REFERENCES FILE(cal_id) ON DELETE CASCADE)", function(err, rows, fields) {
+			if (err) {
+				res.status(500).send("oopsie woopsie");
+			}
+		});
+
+		connection.query("CREATE TABLE IF NOT EXISTS ALARM (alarm_id INT AUTO_INCREMENT PRIMARY KEY, action VARCHAR(256) NOT NULL, trigger VARCHAR(256) NOT NULL, event INT NOT NULL, FOREIGN KEY(event) REFERENCES EVENT(event_id) ON DELETE CASCADE)", function(err, rows, fields) {
+			if (err) {
+				res.status(500).send("oopsie woopsie");
+			}
+		});
+
+	});
+});

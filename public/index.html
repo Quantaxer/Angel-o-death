@@ -24,6 +24,7 @@
             <label id = "calButton" class = "sidebtn">Calendar View Panel</label>
             <label id = "cCalButton" class = "sidebtn">Create Calendar</label>
             <label id = "aEventButton" class = "sidebtn">Add Event</label>
+            <label id = "dbButton" class = "sidebtn">Database</label>
         </center>
     </div>
     <div class = "header">
@@ -128,6 +129,15 @@
                 </form>
             </div>
             <hr>
+        </div>
+        <div style="display:none" class ="database">
+            <form action = '/dbUserInfo' method='post' id = "createCal">
+                Username:<br> <input type="text" name="username" id="username" required>
+                <br>Password:<br> <input type="text" name="pw" required>
+                <br>Database Name:<br> <input type= "text" name="dbName" required>
+                <br><br><input type = "submit" value = "Create Calendar">
+            </form>
+
         </div>
     </div>
     <!-- Leave me at the bottom of body -->

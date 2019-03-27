@@ -298,6 +298,7 @@ $(document).ready(function() {
         $(".calView").hide();
         $(".cCal").hide();
         $(".aEvent").hide();
+        $(".database").hide();
     });
 
     $("#calButton").click(function() {
@@ -305,12 +306,14 @@ $(document).ready(function() {
         $(".calView").show();
         $(".cCal").hide();
         $(".aEvent").hide();
+        $(".database").hide();
     });
 
     $("#cCalButton").click(function() {
         $(".fileLog").hide();
         $(".calView").hide();
         $(".cCal").show();
+        $(".database").hide();
         $(".aEvent").hide();
     });
 
@@ -318,7 +321,16 @@ $(document).ready(function() {
         $(".fileLog").hide();
         $(".calView").hide();
         $(".cCal").hide();
+        $("#dbButton").hide();
         $(".aEvent").show();
+    });
+
+    $("#dbButton").click(function() {
+        $(".fileLog").hide();
+        $(".calView").hide();
+        $(".cCal").hide();
+        $(".aEvent").hide();
+        $(".database").show();
     });
 
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible
