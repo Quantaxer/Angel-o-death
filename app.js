@@ -258,11 +258,15 @@ app.post('/newEvt', function(req, res) {
 });
 
 const mysql = require('mysql');
+var userN;
+var pass;
+var name;
+
 
 app.post('/dbUserInfo', function(req, res) {
-	var userN = req.body.username;
-	var pass = req.body.pw;
-	var name = req.body.dbName;
+	userN = req.body.username;
+	pass = req.body.pw;
+	name = req.body.dbName;
 	var isErr;
 	const connection = mysql.createConnection({
 		host: 'dursley.socs.uoguelph.ca',
@@ -305,3 +309,110 @@ app.post('/dbUserInfo', function(req, res) {
 		}
 	});
 });
+
+app.get('/dbStatus', function(req, res) {
+	var n1;
+	var n2;
+	var n3;
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect(function(err) {
+		if (err) {
+			console.log("fuck");
+		}
+		else {
+			connection.query("select count(*) as total from FILE", function(err, results) {
+				if (err) {
+					console.log("oops");
+				}
+				else {
+					n1 = results[0].total;
+				}
+			});
+			connection.query("select count(*) as total from EVENT", function(err, results) {
+				if (err) {
+					console.log("oops");
+				}
+				else {
+					n2 = results[0].total;
+				}
+			});
+			connection.query("select count(*) as total from ALARM", function(err, results) {
+				if (err) {
+					console.log("oops");
+				}
+				else {
+					n3 = results[0].total;
+				}
+			});
+			res.send({N1:n1,N2:n2,N3:n3});
+		}
+	});
+});
+
+app.get('/dbClear', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+
+	connection.connect();
+	connection.query("delete from ALARM", function(err, results) {
+		if (err) {
+			console.log("oops");
+		}
+	});
+
+	connection.query("delete from EVENT", function(err, results) {
+		if (err) {
+			console.log("oops");
+		}
+	});
+
+	connection.query("delete from FILE", function(err, results) {
+		if (err) {
+			console.log("oops");
+		}
+	});
+
+	connection.end();
+});
+
+app.get('/sendToServer', function(req, res) {
+	var listOf = req.query.list;
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+
+	connection.connect();
+	listOf.forEach(function(item) {
+		connection.query("select cal_id from FILE where file_Name = '?'", item, function(err, rows, fields) {
+			if (err) {
+				console.log("oooof");
+			}
+			else {
+				let x = sharedLib.filePanelRow('uploads/' + item);
+				var temp = JSON.parse(x);
+				let tempval = [item, temp.version, temp.prodID];
+				connection.query("insert into FILE (file_name, version, prod_id) values (?, ?, ?)", tempval, function(err, results) {
+					if (err) {
+						console.log("oops");
+					}
+					else {
+
+					}
+				});
+			}
+		});
+	});
+	connection.end();
+})

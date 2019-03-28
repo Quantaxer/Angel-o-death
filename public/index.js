@@ -343,6 +343,9 @@ $(document).ready(function() {
             success: function (data) {
                 if (data == "good") {
                     $(".databaseOperations").show();
+                    if ($("#fileLogTable tr").length > 1) {
+                        document.getElementById("storeFiles").disabled = false;
+                    }
                 }
                 else if (data == "badCred") {
                     alert("Unable to connect to the database, please check credentials");
@@ -353,6 +356,49 @@ $(document).ready(function() {
             },
         });
     });
+
+    $("#storeFiles").click(function() {
+        $.ajax({
+            type: 'get',            //Request type
+            dataType: 'json',       //Data type - we will use JSON for almost everything 
+            url: '/populateDropDownValid',   //The server endpoint we are connecting to
+            success: function (data) {
+                var temp = data.listOfFiles;
+                console.log(temp);
+                $.ajax({
+                    type: 'get',            //Request type
+                    dataType: 'json',       //Data type - we will use JSON for almost everything 
+                    url: '/sendToServer',   //The server endpoint we are connecting to
+                    data: {list: temp},
+                    success: function(data2) {
+
+                    }
+                });
+            }
+        });
+    });
+
+    $("#clearData").click(function() {
+        $.ajax({
+            type: 'get',
+            url: '/dbClear',
+             success: function (data) {
+                $('#statusBox').append("<br/>Deleted all info from tables");
+            }
+        });
+    });
+
+
+    $("#displayDBStatus").click(function() {
+        $.ajax({
+            type: 'get',
+            url: '/dbStatus',
+             success: function (data) {
+                $('#statusBox').append("<br/>Database has " +data.N1+" files, " + data.N2+" events, and " + data.N3+ " alarms.");
+            }
+        });
+    });
+
 
     // Event listener form replacement example, building a Single-Page-App, no redirects if possible
     /*$('#someform').submit(function(e){
