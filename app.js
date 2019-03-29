@@ -116,6 +116,7 @@ let sharedLib = ffi.Library('./libcal', {
   'displayProps': ['string', ['string', 'int']],
   'createNewCalFile': ['string', ['string', 'int', 'string', 'string', 'string', 'string', 'string', 'string', 'string']],
   'addEvtToCal': ['string', ['string', 'string', 'string', 'string', 'string', 'string', 'string']],
+  'displayPropsJSON': ['string', ['string', 'int']],
 });
 
 app.get('/populateFileLog', function(req, res) {
@@ -386,6 +387,8 @@ app.get('/dbClear', function(req, res) {
 
 app.get('/sendToServer', function(req, res) {
 	var listOf = req.query.list;
+	var props = sharedLib.displayPropsJSON('uploads/testCalProp.ics', 1);
+	console.log(props);
 	const connection = mysql.createConnection({
 		host: 'dursley.socs.uoguelph.ca',
 		user: userN,
@@ -394,7 +397,7 @@ app.get('/sendToServer', function(req, res) {
 	});
 
 	connection.connect();
-	listOf.forEach(function(item) {
+	/*listOf.forEach(function(item) {
 		connection.query("select cal_id from FILE where file_Name = '?'", item, function(err, rows, fields) {
 			if (err) {
 				console.log("oooof");
@@ -408,11 +411,22 @@ app.get('/sendToServer', function(req, res) {
 						console.log("oops");
 					}
 					else {
-
+						var y = sharedLib.calViewPanelRow('uploads/' +  item);
+						var temp2 = JSON.parse(y);
+						var i = 1;
+						y.forEach(function(item2) {
+							var props = sharedlib.displayPropsJSON('uploads/' + item, i);
+							i++;
+							connection.query("insert into EVENT (summary, start_time, location, organizer, cal_file) values (?, ?, ?, ?, ?)", tempval2, function(err, results) {
+								if (err) {
+									console.log("oops");
+								}
+							});
+						});
 					}
 				});
 			}
 		});
-	});
+	});*/
 	connection.end();
 })

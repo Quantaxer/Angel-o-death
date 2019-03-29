@@ -218,6 +218,11 @@ char *validateCalFile(char *fileName);
 char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char *startD, char * startT, char *createD, char* createT, char *summary);
 
 char *addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary);
+char* propJSON(void* toBePrinted);
+char* propListToJSON(const List* propList);
+
+
+char *displayPropsJSON(char *fileName, int eventNum);
 
 // *********************************************************************
 
