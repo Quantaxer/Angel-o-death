@@ -367,17 +367,6 @@ app.get('/dbClear', function(req, res) {
 	});
 
 	connection.connect();
-	connection.query("delete from ALARM", function(err, results) {
-		if (err) {
-			console.log("oops");
-		}
-	});
-
-	connection.query("delete from EVENT", function(err, results) {
-		if (err) {
-			console.log("oops");
-		}
-	});
 
 	connection.query("delete from FILE", function(err, results) {
 		if (err) {
@@ -416,17 +405,47 @@ app.get('/sendToServer', function(req, res) {
 								var y = sharedLib.calViewPanelRow('uploads/' +  item);
 								var temp2 = JSON.parse(y);
 								var i = 1;
-								y.forEach(function(item2) {
-									var props = sharedlib.displayPropsJSON('uploads/' + item, i);
+								temp2.forEach(function(item2) {
+									var tempprops = sharedLib.displayPropsJSON('uploads/' + item, i);
+                                    var props = JSON.parse(tempprops);
 									i++;
 									
 									//maybe do another query to get the cal_id?
-									id = 1;
-									connection.query("insert into EVENT (summary, start_time, location, organizer, cal_file) values ('" + item2.summary + "', '" +  item2.startDT + "', '" + props.LOCATION + "','" + props.ORGANIZER + "'," + id + ")", function(err, results) {
-										if (err) {
-											console.log("oops2");
-										}
-									});
+                                    connection.query("select cal_id as total from FILE where file_Name = '" + item + "'", function(err, results) {
+                                        if (err) {
+                                            console.log("ayylmao");
+                                        }
+                                        else {
+                                            var cal = results[0].total;
+                                            var id = 1;
+                                            connection.query("insert into EVENT (summary, start_time, location, organizer, cal_file) values ('" + item2.summary + "', '" +  item2.startDT.date + item2.startDT.time + "', '" + props.LOCATION + "','" + props.ORGANIZER + "'," + cal + ")", function(err, results) {
+                                                if (err) {
+                                                    console.log("oops2");
+                                                }
+                                                else {
+                                                    var j = 1;
+                                                    var tempalms = sharedLib.displayAlmsJSON('uploads/' + item, j);
+                                                    var alms = JSON.parse(tempalms);
+                                                    console.log(alms);
+                                                    connection.query("select event_id as row from EVENT", function(err, rows, fields) {
+                                                        if (err) {
+                                                            console.log("ayylll");
+                                                        }
+                                                        else {
+                                                            alms.forEach(function(item3) {
+                                                                /*var alm = JSON.parse(item3);
+                                                                connection.query("insert into ALARM (action, trigger, event) values ('" + alm.ACTION + "',' "+ alm.TRIGGER + "'," + rows[j - 2].row + ")", function(err, results) {
+                                                                    if (err) {
+                                                                        console.log(err);
+                                                                    }
+                                                                });*/
+                                                            });
+                                                        }
+                                                    })
+                                                }
+                                            });
+                                        }
+                                    });
 								});
 							}
 						});

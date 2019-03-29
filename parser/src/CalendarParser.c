@@ -1032,11 +1032,11 @@ char* propJSON(void* toBePrinted) {
     char *str;
     Property *propToPrint = (Property*)toBePrinted;
     str = malloc(sizeof(char) * (strlen(propToPrint->propName) + strlen(propToPrint->propDescr) + 10));
-    strcpy(str, "{\"");
+    strcpy(str, "\"");
     strcat(str, propToPrint->propName);
     strcat(str, "\":\"");
     strcat(str, propToPrint->propDescr);
-    strcat(str, "\"}");
+    strcat(str, "\"");
     return str;
 }
 
@@ -1111,17 +1111,17 @@ char *displayAlmsJSON(char *fileName, int eventNum) {
 char* propListToJSON(const List* propList) {
     //Check for NULL
     if (propList == NULL) {
-        return "[]";
+        return "{}";
     }
     //Check if empty list
     if ((propList->head == NULL) && (propList->tail == NULL)) {
-        return "[]";
+        return "{}";
     }
 
     char *json = malloc(sizeof(char) * (2));
     ListIterator iter = createIterator((List*)propList);
     void* elem;
-    strcpy(json, "[");
+    strcpy(json, "{");
     //Iterate through list of events
     while((elem = nextElement(&iter)) != NULL) {
         Property *prop = (Property*)elem;
@@ -1134,7 +1134,7 @@ char* propListToJSON(const List* propList) {
     }
     json = realloc(json, sizeof(char) * (strlen(json) + 2));
     //Remove trailing , with ]
-    json[strlen(json) - 1] = ']';
+    json[strlen(json) - 1] = '}';
     return json;
 }
 

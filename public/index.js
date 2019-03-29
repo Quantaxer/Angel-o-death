@@ -333,7 +333,7 @@ $(document).ready(function() {
         $(".database").show();
     });
 
-    $("#dbLoginButton").click(function() {
+    $("#dbLoginButton").click(function(event) {
         event.preventDefault();
         $.ajax({
             type: 'post',
