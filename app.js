@@ -117,6 +117,8 @@ let sharedLib = ffi.Library('./libcal', {
   'createNewCalFile': ['string', ['string', 'int', 'string', 'string', 'string', 'string', 'string', 'string', 'string']],
   'addEvtToCal': ['string', ['string', 'string', 'string', 'string', 'string', 'string', 'string']],
   'displayPropsJSON': ['string', ['string', 'int']],
+  'displayAlmsJSON': ['string', ['string', 'int']],
+
 });
 
 app.get('/populateFileLog', function(req, res) {
@@ -387,8 +389,7 @@ app.get('/dbClear', function(req, res) {
 
 app.get('/sendToServer', function(req, res) {
 	var listOf = req.query.list;
-	var props = sharedLib.displayPropsJSON('uploads/testCalProp.ics', 1);
-	console.log(props);
+	
 	const connection = mysql.createConnection({
 		host: 'dursley.socs.uoguelph.ca',
 		user: userN,
@@ -397,20 +398,22 @@ app.get('/sendToServer', function(req, res) {
 	});
 
 	connection.connect();
-	/*listOf.forEach(function(item) {
-		connection.query("select cal_id from FILE where file_Name = '?'", item, function(err, rows, fields) {
+	listOf.forEach(function(item) {
+		connection.query("select cal_id from FILE where file_Name = '" + item + "'", function(err, rows, fields) {
 			if (err) {
 				console.log("oooof");
 			}
 			else {
 				let x = sharedLib.filePanelRow('uploads/' + item);
 				var temp = JSON.parse(x);
-				let tempval = [item, temp.version, temp.prodID];
-				connection.query("insert into FILE (file_name, version, prod_id) values (?, ?, ?)", tempval, function(err, results) {
+				console.log(typeof temp.version);
+				var query = "INSERT INTO FILE (file_Name, version, prod_id) VALUES ('" + item + "'," + temp.version + ",'" + temp.prodID + "')";
+				console.log(query);
+				connection.query("INSERT INTO FILE (file_Name, version, prod_id) VALUES ('" + item + "'," + temp.version + ",'" + temp.prodID + "')", function(err, rows, fields) {
 					if (err) {
 						console.log("oops");
 					}
-					else {
+					/*else {
 						var y = sharedLib.calViewPanelRow('uploads/' +  item);
 						var temp2 = JSON.parse(y);
 						var i = 1;
@@ -423,10 +426,10 @@ app.get('/sendToServer', function(req, res) {
 								}
 							});
 						});
-					}
+					}*/
 				});
 			}
 		});
-	});*/
+	});
 	connection.end();
 })

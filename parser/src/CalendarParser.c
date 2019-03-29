@@ -1040,6 +1040,74 @@ char* propJSON(void* toBePrinted) {
     return str;
 }
 
+char* almJSON(void* toBePrinted) {
+    Alarm *alm = (Alarm*)toBePrinted;
+    char *str;
+    str = malloc(sizeof(char) * (strlen(alm->action) + strlen(alm->trigger) + 30));
+    strcpy(str, "{\"ACTION\":\"");
+    strcat(str, alm->action);
+    strcat(str, "\",\"TRIGGER\":\"");
+    strcat(str, alm->trigger);
+    strcat(str, "\"}");
+    return str;
+}
+
+char* almListToJSON(const List* almList) {
+    //Check for NULL
+    if (almList == NULL) {
+        return "[]";
+    }
+    //Check if empty list
+    if ((almList->head == NULL) && (almList->tail == NULL)) {
+        return "[]";
+    }
+
+    char *json = malloc(sizeof(char) * (2));
+    ListIterator iter = createIterator((List*)almList);
+    void* elem;
+    strcpy(json, "[");
+    //Iterate through list of events
+    while((elem = nextElement(&iter)) != NULL) {
+        Alarm *alm = (Alarm*)elem;
+        //Add event json string to new string
+        char *temp = almJSON(alm);
+        json = realloc(json, sizeof(char) * (strlen(temp) + strlen(json) + 2));
+        strcat(json, temp);
+        strcat(json, ",");
+        free(temp);
+    }
+    json = realloc(json, sizeof(char) * (strlen(json) + 2));
+    //Remove trailing , with ]
+    json[strlen(json) - 1] = ']';
+    return json;
+}
+
+char *displayAlmsJSON(char *fileName, int eventNum) {
+    Calendar *cal;
+    int count = 1;
+    char *str;
+    ICalErrorCode err;
+    ICalErrorCode err2;
+    err = createCalendar(fileName, &cal);
+    if (err == OK) {
+        err2 = validateCalendar(cal);
+        if (err2 != OK) {
+            return printError(err);
+        }
+        ListIterator iter = createIterator(cal->events);
+        void* elem;
+        while((elem = nextElement(&iter)) != NULL){
+            if (count == eventNum) {
+                Event *evt = (Event*)elem;
+                str = almListToJSON(evt->alarms);
+            }
+            count++;
+        }
+    }
+    deleteCalendar(cal);
+    return str;
+}
+
 char* propListToJSON(const List* propList) {
     //Check for NULL
     if (propList == NULL) {

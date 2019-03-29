@@ -218,8 +218,12 @@ char *validateCalFile(char *fileName);
 char *createNewCalFile(char *fileName, int version, char *prod, char *uid, char *startD, char * startT, char *createD, char* createT, char *summary);
 
 char *addEvtToCal(char *fileName, char *uid, char *startD, char *startT, char *createD, char* createT, char *summary);
+char* almJSON(void* toBePrinted);
+char* almListToJSON(const List* almList);
+char *displayAlmsJSON(char *fileName, int eventNum);
 char* propJSON(void* toBePrinted);
 char* propListToJSON(const List* propList);
+
 
 
 char *displayPropsJSON(char *fileName, int eventNum);
