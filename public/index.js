@@ -299,6 +299,7 @@ $(document).ready(function() {
         $(".cCal").hide();
         $(".aEvent").hide();
         $(".database").hide();
+        $(".databaseOperations").hide();
     });
 
     $("#calButton").click(function() {
@@ -307,6 +308,8 @@ $(document).ready(function() {
         $(".cCal").hide();
         $(".aEvent").hide();
         $(".database").hide();
+        $(".databaseOperations").hide();
+
     });
 
     $("#cCalButton").click(function() {
@@ -315,6 +318,7 @@ $(document).ready(function() {
         $(".cCal").show();
         $(".database").hide();
         $(".aEvent").hide();
+        $(".databaseOperations").hide();
     });
 
     $("#aEventButton").click(function() {
@@ -323,6 +327,7 @@ $(document).ready(function() {
         $(".cCal").hide();
         $(".database").hide();
         $(".aEvent").show();
+        $(".databaseOperations").hide();
     });
 
     $("#dbButton").click(function() {
@@ -341,11 +346,22 @@ $(document).ready(function() {
             dataType: 'html',
             data: {username: $("#username").val(), pw: $("#pw").val(), dbName: $("#dbName").val()},
             success: function (data) {
+                document.getElementById("storeFiles").disabled = true;
                 if (data == "good") {
                     $(".databaseOperations").show();
-                    if ($("#fileLogTable tr").length > 1) {
+                    if (document.getElementById("viewFiles").length > 0) {
                         document.getElementById("storeFiles").disabled = false;
                     }
+
+                    $.ajax({
+                        type: 'get',
+                        url: '/dbStatus',
+                         success: function (data) {
+                            if (data.N1 > 0) {
+                                document.getElementById("clearData").disabled = false;
+                            }
+                        }
+                    });
                 }
                 else if (data == "badCred") {
                     alert("Unable to connect to the database, please check credentials");
@@ -371,11 +387,12 @@ $(document).ready(function() {
                     url: '/sendToServer',   //The server endpoint we are connecting to
                     data: {list: temp},
                     success: function(data2) {
-
+                        $('#statusBox').append("<br/>Stored all files on the server into the Database");
                     }
                 });
             }
         });
+        document.getElementById("clearData").disabled = false;
     });
 
     $("#clearData").click(function() {
@@ -384,6 +401,7 @@ $(document).ready(function() {
             url: '/dbClear',
              success: function (data) {
                 $('#statusBox').append("<br/>Deleted all info from tables");
+                document.getElementById("clearData").disabled = true;
             }
         });
     });
@@ -397,6 +415,30 @@ $(document).ready(function() {
                 $('#statusBox').append("<br/>Database has " +data.N1+" files, " + data.N2+" events, and " + data.N3+ " alarms.");
             }
         });
+    });
+
+    $("#submitQuery").click(function() {
+         var s = $('#queryList').children("option:selected").val();
+
+         if (s == 1) {
+
+         }
+         else if (s == 2) {
+             var file = prompt("Enter the file name (including extension) you wish to see events for");
+         }
+         else if (s == 3) {
+
+         }
+         else if (s == 4) {
+            var eventNum = prompt("Enter the event ID you wish to see alarms for");
+            
+         }
+         else if (s == 5) {
+            
+         }
+         else if (s == 6) {
+            
+         }
     });
 
 
