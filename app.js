@@ -334,25 +334,26 @@ app.get('/dbStatus', function(req, res) {
 				}
 				else {
 					n1 = results[0].total;
+					connection.query("select count(*) as total from EVENT", function(err, results) {
+						if (err) {
+							console.log("oops");
+						}
+						else {
+							n2 = results[0].total;
+							connection.query("select count(*) as total from ALARM", function(err, results) {
+								if (err) {
+									console.log("oops");
+								}
+								else {
+									n3 = results[0].total;
+									res.send({N1:n1,N2:n2,N3:n3});
+								}
+							});
+						}
+					});
 				}
 			});
-			connection.query("select count(*) as total from EVENT", function(err, results) {
-				if (err) {
-					console.log("oops");
-				}
-				else {
-					n2 = results[0].total;
-				}
-			});
-			connection.query("select count(*) as total from ALARM", function(err, results) {
-				if (err) {
-					console.log("oops");
-				}
-				else {
-					n3 = results[0].total;
-				}
-			});
-			res.send({N1:n1,N2:n2,N3:n3});
+			
 		}
 	});
 });
@@ -397,39 +398,41 @@ app.get('/sendToServer', function(req, res) {
 		database: name
 	});
 
-	connection.connect();
-	listOf.forEach(function(item) {
-		connection.query("select cal_id from FILE where file_Name = '" + item + "'", function(err, rows, fields) {
-			if (err) {
-				console.log("oooof");
-			}
-			else {
-				let x = sharedLib.filePanelRow('uploads/' + item);
-				var temp = JSON.parse(x);
-				console.log(typeof temp.version);
-				var query = "INSERT INTO FILE (file_Name, version, prod_id) VALUES ('" + item + "'," + temp.version + ",'" + temp.prodID + "')";
-				console.log(query);
-				connection.query("INSERT INTO FILE (file_Name, version, prod_id) VALUES ('" + item + "'," + temp.version + ",'" + temp.prodID + "')", function(err, rows, fields) {
-					if (err) {
-						console.log("oops");
-					}
-					/*else {
-						var y = sharedLib.calViewPanelRow('uploads/' +  item);
-						var temp2 = JSON.parse(y);
-						var i = 1;
-						y.forEach(function(item2) {
-							var props = sharedlib.displayPropsJSON('uploads/' + item, i);
-							i++;
-							connection.query("insert into EVENT (summary, start_time, location, organizer, cal_file) values (?, ?, ?, ?, ?)", tempval2, function(err, results) {
-								if (err) {
-									console.log("oops");
-								}
-							});
+	connection.connect(function(err) {
+		listOf.forEach(function(item) {
+			connection.query("select cal_id from FILE where file_Name = '" + item + "'", function(err, rows, fields) {
+				if (err) {
+					console.log("oooof");
+				}
+				else {
+					if (rows[0] == null) {
+						let x = sharedLib.filePanelRow('uploads/' + item);
+						var temp = JSON.parse(x);
+						connection.query("INSERT INTO FILE (file_Name, version, prod_id) VALUES ('" + item + "'," + temp.version + ",'" + temp.prodID + "')", function(err, rows, fields) {
+							if (err) {
+								console.log(err);
+							}
+							else {
+								var y = sharedLib.calViewPanelRow('uploads/' +  item);
+								var temp2 = JSON.parse(y);
+								var i = 1;
+								y.forEach(function(item2) {
+									var props = sharedlib.displayPropsJSON('uploads/' + item, i);
+									i++;
+									
+									//maybe do another query to get the cal_id?
+									id = 1;
+									connection.query("insert into EVENT (summary, start_time, location, organizer, cal_file) values ('" + item2.summary + "', '" +  item2.startDT + "', '" + props.LOCATION + "','" + props.ORGANIZER + "'," + id + ")", function(err, results) {
+										if (err) {
+											console.log("oops2");
+										}
+									});
+								});
+							}
 						});
-					}*/
-				});
-			}
+					}
+				}
+			});
 		});
 	});
-	connection.end();
-})
+});
