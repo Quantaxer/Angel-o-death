@@ -505,13 +505,69 @@ $(document).ready(function() {
             });
          }
          else if (s == 3) {
+            $.ajax({
+                type: 'get',
+                url: '/query3',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    let f = data;
+                    var i = 0;
 
+                    f.forEach(function(item) {
+                        let table = document.getElementById('queryTable');
+                        let row = table.insertRow(i);
+
+                        let cell = row.insertCell(0);
+                        let value = document.createTextNode(item.start_time);
+                        cell.appendChild(value);
+                        if (item.summary != null) {
+                            let cell1 = row.insertCell(1);
+                            let value1 = document.createTextNode(item.summary);
+                            cell1.appendChild(value1);
+                        }
+                        if (item.organizer != null) {
+                            let cell4 = row.insertCell(2);
+                            let value4 = document.createTextNode(item.organizer);
+                            cell4.appendChild(value4);
+                        }
+                        i++;
+                    });
+                }
+            });
          }
          else if (s == 4) {
             var eventNum = prompt("Enter the event ID you wish to see alarms for");
             
          }
          else if (s == 5) {
+             $.ajax({
+                type: 'get',
+                url: '/query5',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    let f = data;
+                    var i = 0;
+
+                    f.forEach(function(item) {
+                        let table = document.getElementById('queryTable');
+                        let row = table.insertRow(i);
+
+                        let cell = row.insertCell(0);
+                        let value = document.createTextNode(item.file_Name);
+                        cell.appendChild(value);
+                        let cell1 = row.insertCell(1);
+                        let value1 = document.createTextNode(item.version);
+                        cell1.appendChild(value1);
+                        
+                        let cell4 = row.insertCell(2);
+                        let value4 = document.createTextNode(item.prod_id);
+                        cell4.appendChild(value4);
+                        i++;
+                    });
+                }
+            });
             
          }
          else if (s == 6) {

@@ -422,6 +422,94 @@ app.get('/query2', function(req, res) {
 	connection.end();
 });
 
+app.get('/query3', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+
+	var userInput = req.query.input;
+	connection.query("select start_time, summary, organizer from EVENT group by start_time having COUNT(start_time) > 1", function(err, results) {
+		if (err) {
+			console.log("yeet");
+		}
+		else {
+			res.send(results);
+		}
+	});
+
+	connection.end();
+});
+
+app.get('/query4', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+
+	var userInput = req.query.input;
+	connection.query("", function(err, results) {
+		if (err) {
+			console.log("yeet");
+		}
+		else {
+			res.send(results);
+		}
+	});
+
+	connection.end();
+});
+
+app.get('/query5', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+
+	var userInput = req.query.input;
+	connection.query("select file_Name, version, prod_id from EVENT, FILE having COUNT(cal_file) > 1", function(err, results) {
+		if (err) {
+			console.log("yeet");
+		}
+		else {
+			res.send(results);
+		}
+	});
+
+	connection.end();
+});
+
+app.get('/query6', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+
+	var userInput = req.query.input;
+	connection.query("", function(err, results) {
+		if (err) {
+			console.log("yeet");
+		}
+		else {
+			res.send(results);
+		}
+	});
+
+	connection.end();
+});
+
 app.get('/sendToServer', function(req, res) {
 	var listOf = req.query.list;
 	
