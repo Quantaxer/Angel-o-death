@@ -141,15 +141,18 @@
                 <button disabled id = "storeFiles" type="button" class="btn">Store All Files</button>
                 <button disabled id = "clearData" type="button" class="btn">Clear All data</button>
                 <button id = "displayDBStatus" type="button" class="btn">Display DB Status</button>
+                <br>
                 <select name ="queryList" id = "queryList">
                     <option value = "1"> Display all events sorted by date</option>
                     <option value = "2"> Display all events  in a file</option>
                     <option value = "3"> Display events that conflict with each other</option>
-                    <option value = "4"> Display all alarms in an event</option>
-                    <option value = "5"> placeholder</option>
-                    <option value = "6"> placeholer2</option>
+                    <option value = "4"> Display all alarms in a file</option>
+                    <option value = "5"> Display all files with more than 1 event</option>
+                    <option value = "6"> Display all organizers in a file</option>
                 </select>
                 <button id = "submitQuery" type="button"> Submit Query</button>
+                <br>
+                <table align=center id = 'queryTable'></table>
             </div>
 
         </div>

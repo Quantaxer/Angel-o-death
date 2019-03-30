@@ -379,6 +379,27 @@ app.get('/dbClear', function(req, res) {
 	connection.end();
 });
 
+app.get('/query1', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+
+	connection.query("select event_id, summary, start_time, location, organizer, cal_file from EVENT order by start_time", function(err, results) {
+		if (err) {
+			console.log("HECK");
+		}
+		else {
+			res.send(results);
+		}
+	});
+
+	connection.end();
+});
+
 app.get('/sendToServer', function(req, res) {
 	var listOf = req.query.list;
 	
@@ -395,6 +416,7 @@ app.get('/sendToServer', function(req, res) {
 					console.log("oooof");
 				}
 				else {
+					var count = 0;
 					if (rows[0] == null) {
 						let x = sharedLib.filePanelRow('uploads/' + item);
 						var temp = JSON.parse(x);
@@ -407,13 +429,10 @@ app.get('/sendToServer', function(req, res) {
 								var temp2 = JSON.parse(y);
 								var i = 1;
 								var j = 1;
-								var count = 0;
 								temp2.forEach(function(item2) {
 									var tempprops = sharedLib.displayPropsJSON('uploads/' + item, i);
                                     var props = JSON.parse(tempprops);
 									i++;
-									count++;
-									//maybe do another query to get the cal_id?
                                     connection.query("select cal_id as total from FILE where file_Name = '" + item + "'", function(err, results) {
                                         if (err) {
                                             console.log("ayylmao");
@@ -427,26 +446,29 @@ app.get('/sendToServer', function(req, res) {
                                                 }
                                                 else {
                                                     var tempalms = sharedLib.displayAlmsJSON('uploads/' + item, j);
-                                                    j++;
                                                     var alms = JSON.parse(tempalms);
-                                                    connection.query("select event_id as total2 from EVENT", function(err, rows, fields) {
-                                                    	var eventNum = rows[count - 1].total2;
-                                                        if (err) {
-                                                            console.log("ayylll");
-                                                        }
-                                                        else {
-                                                        	if (alms.length > 0) {
-																alms.forEach(function(item3) {
-	                                                                connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "',' "+ item3.TRIGGER + "'," + eventNum + ")", function(err, results) {
+                                                    if (alms.length > 0) {
+                                                    	var count = 0;
+	                                                    connection.query("select event_id as total2 from EVENT", function(err, rows, fields) {
+	                                                        if (err) {
+	                                                            console.log("biggest oof");
+	                                                        }
+	                                                        else {
+                                                        		var eventNum = rows[count].total2;
+                                                        		alms.forEach(function(item3) {
+	                                                        		connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "',' "+ item3.TRIGGER + "'," + eventNum + ")", function(err, results) {
 	                                                                    if (err) {
 	                                                                        console.log(err);
 	                                                                    }
+	                                                                    else {
+	                                                                    }
 	                                                                });
-                                                            	});
-                                                        	}
-                                                            
-                                                        }
-                                                    })
+	                                                                count++;
+	                                                                console.log(count);
+	                                                            });
+	                                                        }
+	                                                    });
+	                                                }
                                                 }
                                             });
                                         }

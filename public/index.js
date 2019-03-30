@@ -387,7 +387,13 @@ $(document).ready(function() {
                     url: '/sendToServer',   //The server endpoint we are connecting to
                     data: {list: temp},
                     success: function(data2) {
-                        $('#statusBox').append("<br/>Stored all files on the server into the Database");
+                        $.ajax({
+                            type: 'get',
+                            url: '/dbStatus',
+                             success: function (data) {
+                                $('#statusBox').append("<br/>Database has " +data.N1+" files, " + data.N2+" events, and " + data.N3+ " alarms.");
+                            }
+                        });
                     }
                 });
             }
@@ -400,8 +406,14 @@ $(document).ready(function() {
             type: 'get',
             url: '/dbClear',
              success: function (data) {
-                $('#statusBox').append("<br/>Deleted all info from tables");
-                document.getElementById("clearData").disabled = true;
+                $.ajax({
+                    type: 'get',
+                    url: '/dbStatus',
+                     success: function (data) {
+                        $('#statusBox').append("<br/>Deleted all elements in the database. Database has " +data.N1+" files, " + data.N2+" events, and " + data.N3+ " alarms.");
+                        document.getElementById("clearData").disabled = true;
+                    }
+                });
             }
         });
     });
@@ -421,7 +433,46 @@ $(document).ready(function() {
          var s = $('#queryList').children("option:selected").val();
 
          if (s == 1) {
+            $.ajax({
+                type: 'get',
+                url: '/query1',
+                dataType: 'json',
+                success: function (data) {
+                    let f = data;
+                    var i = 0;
 
+
+                    f.forEach(function(item) {
+                        let table = document.getElementById('queryTable');
+                        let row = table.insertRow(i);
+
+                        let cell = row.insertCell(0);
+                        let value = document.createTextNode(item.event_id);
+                        cell.appendChild(value);
+
+                        let cell1 = row.insertCell(1);
+                        let value1 = document.createTextNode(item.summary);
+                        cell1.appendChild(value1);
+
+                        let cell2 = row.insertCell(2);
+                        let value2 = document.createTextNode(item.start_time);
+                        cell2.appendChild(value2);
+
+                        let cell3 = row.insertCell(3);
+                        let value3 = document.createTextNode(item.location);
+                        cell3.appendChild(value3);
+
+                        let cell4 = row.insertCell(4);
+                        let value4 = document.createTextNode(item.organizer);
+                        cell4.appendChild(value4);
+
+                        let cell5 = row.insertCell(5);
+                        let value5 = document.createTextNode(item.cal_file);
+                        cell5.appendChild(value5);
+                        i++;
+                    });
+                }
+            });
          }
          else if (s == 2) {
              var file = prompt("Enter the file name (including extension) you wish to see events for");
