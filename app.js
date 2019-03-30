@@ -400,6 +400,28 @@ app.get('/query1', function(req, res) {
 	connection.end();
 });
 
+app.get('/query2', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+
+	var userInput = req.query.input;
+	connection.query("select start_time, summary from FILE, EVENT where (FILE.cal_id = EVENT.cal_file and file_Name = '" + userInput +"') order by start_time", function(err, results) {
+		if (err) {
+			console.log("yeet");
+		}
+		else {
+			res.send(results);
+		}
+	});
+
+	connection.end();
+});
+
 app.get('/sendToServer', function(req, res) {
 	var listOf = req.query.list;
 	

@@ -430,8 +430,11 @@ $(document).ready(function() {
     });
 
     $("#submitQuery").click(function() {
-         var s = $('#queryList').children("option:selected").val();
-
+        var s = $('#queryList').children("option:selected").val();
+        for(var j = document.getElementById('queryTable').rows.length - 1; j >= 0; j--)
+        {
+            document.getElementById('queryTable').deleteRow(j);
+        }
          if (s == 1) {
             $.ajax({
                 type: 'get',
@@ -440,7 +443,6 @@ $(document).ready(function() {
                 success: function (data) {
                     let f = data;
                     var i = 0;
-
 
                     f.forEach(function(item) {
                         let table = document.getElementById('queryTable');
@@ -476,6 +478,31 @@ $(document).ready(function() {
          }
          else if (s == 2) {
              var file = prompt("Enter the file name (including extension) you wish to see events for");
+             $.ajax({
+                type: 'get',
+                url: '/query2',
+                dataType: 'json',
+                data: {input: file},
+                success: function (data) {
+                    console.log(data);
+                    let f = data;
+                    var i = 0;
+
+                    f.forEach(function(item) {
+                        let table = document.getElementById('queryTable');
+                        let row = table.insertRow(i);
+
+                        let cell = row.insertCell(0);
+                        let value = document.createTextNode(item.start_time);
+                        cell.appendChild(value);
+
+                        let cell1 = row.insertCell(1);
+                        let value1 = document.createTextNode(item.summary);
+                        cell1.appendChild(value1);
+                        i++;
+                    });
+                }
+            });
          }
          else if (s == 3) {
 
