@@ -571,6 +571,37 @@ $(document).ready(function() {
             
          }
          else if (s == 6) {
+            $.ajax({
+                type: 'get',
+                url: '/query6',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    let f = data;
+                    var i = 0;
+
+                    f.forEach(function(item) {
+                        let table = document.getElementById('queryTable');
+                        let row = table.insertRow(i);
+
+                        let cell = row.insertCell(0);
+                        let value = document.createTextNode(item.file_Name);
+                        cell.appendChild(value);
+                        let cell1 = row.insertCell(1);
+                        let value1 = document.createTextNode(item.summary);
+                        cell1.appendChild(value1);
+                        
+                        let cell4 = row.insertCell(2);
+                        let value4 = document.createTextNode(item.location);
+                        cell4.appendChild(value4);
+
+                        let cell5 = row.insertCell(2);
+                        let value5 = document.createTextNode(item.organizer);
+                        cell5.appendChild(value5);
+                        i++;
+                    });
+                }
+            });
             
          }
     });

@@ -498,7 +498,7 @@ app.get('/query6', function(req, res) {
 	connection.connect();
 
 	var userInput = req.query.input;
-	connection.query("", function(err, results) {
+	connection.query("select file_Name, summary, location, organizer from FILE, EVENT where (EVENT.location != 'null' and EVENT.organizer != 'null' and cal_id = cal_file)", function(err, results) {
 		if (err) {
 			console.log("yeet");
 		}
@@ -550,6 +550,15 @@ app.get('/sendToServer', function(req, res) {
                                         else {
                                             var cal = results[0].total;
                                             var id = 1;
+                                            if (props.LOCATION == undefined) {
+                                            	props.LOCATION = null;
+                                            }
+                                            if (props.ORGANIZER == undefined) {
+                                            	props.ORGANIZER = null;
+                                            } 
+                                            if (item2.summary == undefined) {
+                                            	item2.summary = null;
+                                            }
                                             connection.query("insert into EVENT (summary, start_time, location, organizer, cal_file) values ('" + item2.summary + "', '" +  item2.startDT.date + item2.startDT.time + "', '" + props.LOCATION + "','" + props.ORGANIZER + "'," + cal + ")", function(err, results) {
                                                 if (err) {
                                                     console.log("oops2");
@@ -563,18 +572,16 @@ app.get('/sendToServer', function(req, res) {
 	                                                        if (err) {
 	                                                            console.log("biggest oof");
 	                                                        }
+	                                                        
 	                                                        else {
-                                                        		var eventNum = rows[count].total2;
-                                                        		alms.forEach(function(item3) {
-	                                                        		connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "',' "+ item3.TRIGGER + "'," + eventNum + ")", function(err, results) {
+																alms.forEach(function(item3) {
+	                                                        		connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "',' "+ item3.TRIGGER + "'," + rows[0].total2 + ")", function(err, results) {
 	                                                                    if (err) {
 	                                                                        console.log(err);
 	                                                                    }
 	                                                                    else {
 	                                                                    }
 	                                                                });
-	                                                                count++;
-	                                                                console.log(count);
 	                                                            });
 	                                                        }
 	                                                    });
