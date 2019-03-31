@@ -601,38 +601,23 @@ app.get('/sendToServer', function(req, res) {
 	                                                        }
 	                                                        
 	                                                        else {
-	                                                        	alms.forEach(function(item3) {
-                                                        			connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "','"+ item3.TRIGGER + "'," + rows2[0].total2 + ") ", function(err, results) {
-                                                        				if (err) {
-                                                        					console.log(err);
-                                                        				}
-                                                        				else {
-																			connection.query("select alarm_id as num from ALARM", function(err, rows, fields) {
-																				if (err) {
-																					console.log(err);
-																				}
-																				else {
-																					var k = 0;
-		                                                        					rows2.forEach(function(val) {
-						                                                        		if (arr.indexOf(val.total2) == -1) {
-							                                                        		alms.forEach(function(item3) {
-							                                                        			if (rows[k] != undefined) {
-																									connection.query("update ALARM set event = " + val.total2 + " where alarm_id =" + rows[k].num, function(err, results) {
-									                                                        			if (err) {
-									                                                        			console.log(err);
-									                                                        			}
-								                                                                    });
-							                                                        			}
-							                                                                    k++;
-							                                                        		});
-							                                                        		arr.push(val.total2);
-						                                                        		}
-							                                                        });
-																				}
+	                                                        	var a = 1;
+	                                                        	rows2.forEach(function(val) {
+	                                                        		if (arr.indexOf(val.total2) == -1) {
+		                                                        		 var t = sharedLib.displayAlmsJSON('uploads/' + item, a);
+                                   										 var t2 = JSON.parse(t);
+	                                                        				t2.forEach(function(item3) {
+	                                                        					connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "','"+ item3.TRIGGER + "'," + val.total2 + ") ", function(err, results) {
+				                                                        			if (err) {
+				                                                        			console.log(err);
+				                                                        			}
+				                                                        		});
 	                                                        				});
-                                                        				}
-                                                                    });
-                                                        		});
+		                                                        		arr.push(val.total2);
+	                                                        		}
+	                                                        		a++;
+		                                                        });
+	                                                        	
 	                                                        }
 	                                                    });
 	                                                }
