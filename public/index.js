@@ -537,8 +537,35 @@ $(document).ready(function() {
             });
          }
          else if (s == 4) {
-            var eventNum = prompt("Enter the event ID you wish to see alarms for");
-            
+            var file = prompt("Enter the file name (including extension) you wish to see alarms for");
+             $.ajax({
+                type: 'get',
+                url: '/query4',
+                dataType: 'json',
+                data: {input: file},
+                success: function (data) {
+                    console.log(data);
+                    let f = data;
+                    var i = 0;
+
+                    f.forEach(function(item) {
+                        let table = document.getElementById('queryTable');
+                        let row = table.insertRow(i);
+
+                        let cell = row.insertCell(0);
+                        let value = document.createTextNode(item.file_Name);
+                        cell.appendChild(value);
+                        let cell1 = row.insertCell(1);
+                        let value1 = document.createTextNode(item.action);
+                        cell1.appendChild(value1);
+                        
+                        let cell4 = row.insertCell(2);
+                        let value4 = document.createTextNode(item.trigger);
+                        cell4.appendChild(value4);
+                        i++;
+                    });
+                }
+            });
          }
          else if (s == 5) {
              $.ajax({

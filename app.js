@@ -454,7 +454,7 @@ app.get('/query4', function(req, res) {
 	connection.connect();
 
 	var userInput = req.query.input;
-	connection.query("", function(err, results) {
+	connection.query("select file_Name, action, `trigger` from EVENT, FILE, ALARM where (ALARM.event = EVENT.event_id and EVENT.cal_file = FILE.cal_id and FILE.file_Name ='" + userInput + "')", function(err, results) {
 		if (err) {
 			console.log("yeet");
 		}
@@ -520,6 +520,7 @@ app.get('/sendToServer', function(req, res) {
 		database: name
 	});
 	connection.connect(function(err) {
+		var arr = [];
 		listOf.forEach(function(item) {
 			connection.query("select cal_id from FILE where file_Name = '" + item + "'", function(err, rows, fields) {
 				if (err) {
@@ -566,23 +567,35 @@ app.get('/sendToServer', function(req, res) {
                                                 else {
                                                     var tempalms = sharedLib.displayAlmsJSON('uploads/' + item, j);
                                                     var alms = JSON.parse(tempalms);
+                                                    j++;
                                                     if (alms.length > 0) {
                                                     	var count = 0;
-	                                                    connection.query("select event_id as total2 from EVENT", function(err, rows, fields) {
+	                                                    connection.query("select event_id as total2 from EVENT where cal_file = '" + cal + "'", function(err, rows2, fields) {
 	                                                        if (err) {
 	                                                            console.log("biggest oof");
 	                                                        }
 	                                                        
 	                                                        else {
-																alms.forEach(function(item3) {
-	                                                        		connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "',' "+ item3.TRIGGER + "'," + rows[0].total2 + ")", function(err, results) {
-	                                                                    if (err) {
-	                                                                        console.log(err);
-	                                                                    }
-	                                                                    else {
-	                                                                    }
-	                                                                });
-	                                                            });
+	                                                        	alms.forEach(function(item3) {
+                                                        			connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "','"+ item3.TRIGGER + "'," + rows2[0].total2 + ") ", function(err, results) {
+                                                        				connection.query("select alarm_id as num from ALARM", function(err, rows, fields) {
+                                                        					var k = 0;
+                                                        					rows2.forEach(function(val) {
+				                                                        		if (arr.indexOf(val.total2) == -1) {
+					                                                        		alms.forEach(function(item3) {
+					                                                        			connection.query("update ALARM set event = " + val.total2 + " where alarm_id =" + rows[k].num, function(err, results) {
+						                                                        			if (err) {
+						                                                        			console.log(err);
+						                                                        			}
+					                                                                    });
+					                                                                    k++;
+					                                                        		});
+					                                                        		arr.push(val.total2);
+				                                                        		}
+					                                                        });
+                                                        				});
+                                                                    });
+                                                        		});
 	                                                        }
 	                                                    });
 	                                                }
