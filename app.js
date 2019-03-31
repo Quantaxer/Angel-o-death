@@ -444,6 +444,31 @@ app.get('/query3', function(req, res) {
 	connection.end();
 });
 
+app.get('/checkIfExists', function(req, res) {
+	const connection = mysql.createConnection({
+		host: 'dursley.socs.uoguelph.ca',
+		user: userN,
+		password: pass,
+		database: name
+	});
+	connection.connect();
+	var userInput = req.query.input;
+	connection.query("select * from FILE where (file_Name = '" + userInput + "')", function(err, results) {
+		if (err) {
+			console.log("yes");
+		}
+		else {
+			if (results.length == 0) {
+				res.send({val: results, err: "bad"});
+			}
+			else {
+				res.send({val: results, err: "good"});
+			}
+		}
+	});
+	connection.end();
+})
+
 app.get('/query4', function(req, res) {
 	const connection = mysql.createConnection({
 		host: 'dursley.socs.uoguelph.ca',
@@ -454,12 +479,12 @@ app.get('/query4', function(req, res) {
 	connection.connect();
 
 	var userInput = req.query.input;
-	connection.query("select file_Name, action, `trigger` from EVENT, FILE, ALARM where (ALARM.event = EVENT.event_id and EVENT.cal_file = FILE.cal_id and FILE.file_Name ='" + userInput + "')", function(err, results) {
+	connection.query("select file_Name, action, `trigger` from EVENT, FILE, ALARM where (ALARM.event = EVENT.event_id and EVENT.cal_file = FILE.cal_id and FILE.file_Name = '" + userInput + "')", function(err, results) {
 		if (err) {
 			console.log("yeet");
 		}
 		else {
-			res.send(results);
+			return res.send({val:results, err:"good"});
 		}
 	});
 
@@ -578,22 +603,34 @@ app.get('/sendToServer', function(req, res) {
 	                                                        else {
 	                                                        	alms.forEach(function(item3) {
                                                         			connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "','"+ item3.TRIGGER + "'," + rows2[0].total2 + ") ", function(err, results) {
-                                                        				connection.query("select alarm_id as num from ALARM", function(err, rows, fields) {
-                                                        					var k = 0;
-                                                        					rows2.forEach(function(val) {
-				                                                        		if (arr.indexOf(val.total2) == -1) {
-					                                                        		alms.forEach(function(item3) {
-					                                                        			connection.query("update ALARM set event = " + val.total2 + " where alarm_id =" + rows[k].num, function(err, results) {
-						                                                        			if (err) {
-						                                                        			console.log(err);
-						                                                        			}
-					                                                                    });
-					                                                                    k++;
-					                                                        		});
-					                                                        		arr.push(val.total2);
-				                                                        		}
-					                                                        });
-                                                        				});
+                                                        				if (err) {
+                                                        					console.log(err);
+                                                        				}
+                                                        				else {
+																			connection.query("select alarm_id as num from ALARM", function(err, rows, fields) {
+																				if (err) {
+																					console.log(err);
+																				}
+																				else {
+																					var k = 0;
+		                                                        					rows2.forEach(function(val) {
+						                                                        		if (arr.indexOf(val.total2) == -1) {
+							                                                        		alms.forEach(function(item3) {
+							                                                        			if (rows[k] != undefined) {
+																									connection.query("update ALARM set event = " + val.total2 + " where alarm_id =" + rows[k].num, function(err, results) {
+									                                                        			if (err) {
+									                                                        			console.log(err);
+									                                                        			}
+								                                                                    });
+							                                                        			}
+							                                                                    k++;
+							                                                        		});
+							                                                        		arr.push(val.total2);
+						                                                        		}
+							                                                        });
+																				}
+	                                                        				});
+                                                        				}
                                                                     });
                                                         		});
 	                                                        }
@@ -611,5 +648,5 @@ app.get('/sendToServer', function(req, res) {
 			});
 		});
 	});
-	res.send("gg");
+	res.send({err:"idk"});
 });
