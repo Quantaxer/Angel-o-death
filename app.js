@@ -609,8 +609,11 @@ app.get('/sendToServer', function(req, res) {
 	                                                        				t2.forEach(function(item3) {
 	                                                        					connection.query("insert into ALARM (action, `trigger`, event) values ('" + item3.ACTION + "','"+ item3.TRIGGER + "'," + val.total2 + ") ", function(err, results) {
 				                                                        			if (err) {
-				                                                        			console.log(err);
 				                                                        			}
+                                                                                    else {
+
+                                                                                    }
+
 				                                                        		});
 	                                                        				});
 		                                                        		arr.push(val.total2);
@@ -632,6 +635,6 @@ app.get('/sendToServer', function(req, res) {
 				}
 			});
 		});
+        res.send({err:"idk"});
 	});
-	res.send({err:"idk"});
 });

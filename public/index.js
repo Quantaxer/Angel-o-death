@@ -380,14 +380,29 @@ $(document).ready(function() {
             url: '/populateDropDownValid',   //The server endpoint we are connecting to
             success: function (data) {
                 var temp = data.listOfFiles;
-                $.ajax({
+                var addAll = $.ajax({
                     type: 'get',            //Request type
                     dataType: 'json',       //Data type - we will use JSON for almost everything 
                     url: '/sendToServer',   //The server endpoint we are connecting to
                     data: {list: temp},
                     success: function(data2) {
-                         
-                    }
+                        var done;
+                        console.log("h");
+                    },
+                });
+                addAll.done(function(f) {
+                    setTimeout(() => {
+                        $.ajax({
+                            type: 'get',
+                            url: '/dbStatus',
+                             success: function (data) {
+                                if (data.N1 > 0) {
+                                    $('#statusBox').append("<br/>Database has " +data.N1+" files, " + data.N2+" events, and " + data.N3+ " alarms.");
+                                }
+                            }
+                        });
+                    }, 2 * 1000);
+                     
                 });
             }
         });

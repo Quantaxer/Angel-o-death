@@ -131,16 +131,19 @@
             <hr>
         </div>
         <div style="display:none" class ="database">
-            <form action = '/dbUserInfo' method='post' id = "dbLogin">
-                Username:<br> <input type="text" name="username" id="username" required>
-                <br>Password:<br> <input type="password" name="pw" id = "pw" required>
-                <br>Database Name:<br> <input type= "text" name="dbName" id = "dbName" required>
-                <br><br><input type = "submit" value = "Login" id = "dbLoginButton">
-            </form>
+        	<div class = "contain">
+	            <form action = '/dbUserInfo' method='post' id = "dbLogin">
+	                Username:<br> <input type="text" name="username" id="username" required>
+	                <br>Password:<br> <input type="password" name="pw" id = "pw" required>
+	                <br>Database Name:<br> <input type= "text" name="dbName" id = "dbName" required>
+	                <br><br><input type = "submit" value = "Login" id = "dbLoginButton">
+	            </form>
+	        </div>
+	        <br>
             <div style="display:none" class = "databaseOperations">
-                <button disabled id = "storeFiles" type="button" class="btn">Store All Files</button>
-                <button disabled id = "clearData" type="button" class="btn">Clear All data</button>
-                <button id = "displayDBStatus" type="button" class="btn">Display DB Status</button>
+                <button disabled id = "storeFiles" type="button" class="btn2">Store All Files</button>
+                <button disabled id = "clearData" type="button" class="btn2">Clear All data</button>
+                <button id = "displayDBStatus" type="button" class="btn2">Display DB Status</button>
                 <br>
                 <select name ="queryList" id = "queryList">
                     <option value = "1"> Display all events sorted by date</option>
